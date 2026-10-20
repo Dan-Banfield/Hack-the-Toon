@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hack the Toon · Newcastle's 24-hour hackathon</title>
+  <meta name="description" content="Hack the Toon is a free, 24-hour student hackathon on the banks of the Tyne in Newcastle. Build something canny.">
+  <meta name="theme-color" content="#0d1420">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DotGothic16&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/scenes.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#register">Skip to registration</a>
+
+  <!-- ───────────── Header ───────────── -->
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" aria-label="Hack the Toon, back to top">
+      <svg class="brand__mark" viewBox="0 0 48 32" aria-hidden="true">
+        <!-- Tyne Bridge arch over a deck -->
+        <path d="M4 28 Q24 -6 44 28" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M2 20 H46" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <path d="M14 12.5V20 M19 9V20 M24 7.8V20 M29 9V20 M34 12.5V20" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="24" cy="27" r="2.6" fill="var(--metro)"/>
+      </svg>
+      <span class="brand__name">Hack the Toon</span>
+    </a>
+    <a class="btn btn--small btn--metro" href="#register">Register</a>
+  </header>
+
+  <main id="top">
+    <!-- ───────────── Hero · Jesmond ───────────── -->
+    <section class="hero" id="home" data-station="Jesmond" data-label="Start">
+      <div class="hero__sky" aria-hidden="true">
+        <svg class="hero__stars" data-stars viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice"></svg>
+      </div>
+
+      <div class="hero__content">
+        <p class="dotmatrix hero__eyebrow">
+          <span class="dotmatrix__dot" aria-hidden="true"></span>
+          Newcastle upon Tyne &middot; 27&ndash;28 Feb 2027
+        </p>
+        <h1 class="hero__title">
+          <span class="hero__title-small">Hack the</span>
+          <span class="hero__title-big">Toon<span class="hero__stop">.</span></span>
+        </h1>
+        <p class="hero__lede">
+          Twenty-four hours of building, breaking and free
+          <span class="geordie" tabindex="0">bait<span class="geordie__gloss" role="tooltip">food &mdash; specifically, a packed lunch</span></span>
+          on the banks of the Tyne. Free for students. Every skill level welcome &mdash; especially first-timers.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--metro" href="#register">Howay, get your ticket <span aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn--ghost" href="#about">What&rsquo;s the craic?</a>
+        </div>
+      </div>
+
+      <div class="hero__scene" aria-hidden="true">
+        <svg class="skyline" data-skyline viewBox="0 0 1600 520" preserveAspectRatio="xMaxYMax slice"></svg>
+      </div>
+    </section>
+
+    <!-- ───────────── About · Haymarket ───────────── -->
+    <section class="section section--paper" id="about" data-station="Haymarket" data-label="About">
+      <div class="container">
+        <div class="station-sign" aria-hidden="true"><span class="station-sign__bar"></span>Haymarket</div>
+        <div class="about">
+          <div class="about__text">
+            <h2 class="section__title">What&rsquo;s the craic?</h2>
+            <p class="section__lede">
+              Hack the Toon is Newcastle&rsquo;s student hackathon: a weekend where you team up with strangers,
+              learn something new, and build a thing that didn&rsquo;t exist on Saturday morning.
+            </p>
+            <p>
+              Never coded before? <span class="geordie" tabindex="0">Champion<span class="geordie__gloss" role="tooltip">great, excellent</span></span>.
+              We run beginner workshops on the first morning and our mentors are there all night.
+              Been to fifty hackathons? Grand &mdash; we&rsquo;ve got prizes worth showing off.
+            </p>
+            <ul class="perks">
+              <li><span class="perks__icon" aria-hidden="true">&#9670;</span>Food all weekend, stotties included</li>
+              <li><span class="perks__icon" aria-hidden="true">&#9670;</span>Workshops, mentors &amp; talks</li>
+              <li><span class="perks__icon" aria-hidden="true">&#9670;</span>Prizes, swag &amp; a proper hoodie</li>
+              <li><span class="perks__icon" aria-hidden="true">&#9670;</span>Quiet room for a kip</li>
+            </ul>
+          </div>
+          <dl class="stats">
+            <div class="stats__item"><dt>Hours</dt><dd>24</dd></div>
+            <div class="stats__item"><dt>Hackers</dt><dd>300</dd></div>
+            <div class="stats__item"><dt>Cost to you</dt><dd>&pound;0</dd></div>
+            <div class="stats__item stats__item--metro"><dt>Bridges over the Tyne, in a row</dt><dd>7</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── Timetable · Monument ───────────── -->
+    <section class="section section--paper-2" id="timetable" data-station="Monument" data-label="Timetable">
+      <div class="container">
+        <div class="station-sign" aria-hidden="true"><span class="station-sign__bar"></span>Monument</div>
+        <h2 class="section__title">The timetable</h2>
+        <p class="section__lede">All times are approximate, a bit like the 06:42 to South Shields.</p>
+
+        <div class="board" data-board>
+          <div class="board__head">
+            <span class="board__title">Departures</span>
+            <div class="board__tabs" role="tablist" aria-label="Day">
+              <button class="board__tab" role="tab" aria-selected="true" aria-controls="day-sat" id="tab-sat">Sat 27</button>
+              <button class="board__tab" role="tab" aria-selected="false" aria-controls="day-sun" id="tab-sun" tabindex="-1">Sun 28</button>
+            </div>
+            <span class="board__clock" data-clock aria-hidden="true">--:--</span>
+          </div>
+
+          <ol class="board__rows" id="day-sat" role="tabpanel" aria-labelledby="tab-sat">
+            <li><time>09:00</time><span>Doors open &amp; registration</span><em>Concourse</em></li>
+            <li><time>10:00</time><span>Opening ceremony</span><em>Main hall</em></li>
+            <li><time>11:00</time><span>Hacking begins</span><em>Everywhere</em></li>
+            <li><time>11:30</time><span>Beginner workshop: your first web app</span><em>Room 2</em></li>
+            <li><time>13:00</time><span>Lunch (stotties &amp; pease pudding)</span><em>Canteen</em></li>
+            <li><time>16:00</time><span>Sponsor tech talks</span><em>Room 1</em></li>
+            <li><time>19:00</time><span>Dinner</span><em>Canteen</em></li>
+            <li><time>22:00</time><span>Midnight-ish quiz</span><em>Main hall</em></li>
+          </ol>
+          <ol class="board__rows" id="day-sun" role="tabpanel" aria-labelledby="tab-sun" hidden>
+            <li><time>00:00</time><span>Pizza</span><em>Canteen</em></li>
+            <li><time>03:00</time><span>Cup Noodle o&rsquo;clock</span><em>Canteen</em></li>
+            <li><time>08:00</time><span>Breakfast</span><em>Canteen</em></li>
+            <li><time>11:00</time><span>Hacking ends &mdash; pens down</span><em>Everywhere</em></li>
+            <li><time>11:30</time><span>Judging expo</span><em>Main hall</em></li>
+            <li><time>14:00</time><span>Closing ceremony &amp; prizes</span><em>Main hall</em></li>
+            <li><time>15:00</time><span>Ganning yem</span><em>Platform 1</em></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── Tracks · Central ───────────── -->
+    <section class="section section--paper" id="tracks" data-station="Central" data-label="Tracks">
+      <div class="container">
+        <div class="station-sign" aria-hidden="true"><span class="station-sign__bar"></span>Central</div>
+        <h2 class="section__title">Pick your line</h2>
+        <p class="section__lede">Every project is judged overall, then can ride one of these tracks for a shot at a category prize.</p>
+
+        <div class="lines">
+          <article class="line-card" style="--line: var(--line-green)">
+            <div class="line-card__route" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3>Green Line</h3>
+            <p class="line-card__theme">Sustainability</p>
+            <p>Build for a cleaner North East, from smarter energy use to a better bin day.</p>
+          </article>
+          <article class="line-card" style="--line: var(--metro)">
+            <div class="line-card__route" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3>Yellow Line</h3>
+            <p class="line-card__theme">Open innovation</p>
+            <p>No brief, no rules. Weird, useful or wonderful &mdash; surprise us.</p>
+          </article>
+          <article class="line-card" style="--line: var(--brick)">
+            <div class="line-card__route" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3>Quayside Line</h3>
+            <p class="line-card__theme">Health &amp; wellbeing</p>
+            <p>Tools that look after people, in the clinic or on the Great North Run.</p>
+          </article>
+          <article class="line-card" style="--line: var(--river)">
+            <div class="line-card__route" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <h3>First Stop</h3>
+            <p class="line-card__theme">Best beginner hack</p>
+            <p>For teams where most people are at their first hackathon. Everyone starts somewhere.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── Interlude · Crossing the Tyne ───────────── -->
+    <section class="crossing" aria-label="Interlude: crossing the Tyne" data-crossing>
+      <div class="crossing__sticky">
+        <svg class="crossing__scene" data-crossing-scene viewBox="0 0 1600 760" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+        <div class="crossing__caption">
+          <p class="dotmatrix dotmatrix--dark"><span class="dotmatrix__dot" aria-hidden="true"></span>Now crossing the Tyne</p>
+          <p class="crossing__text">Somewhere around hour twenty, the sun comes up over the river. Keep scrolling and the blinking eye opens.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── FAQ · Gateshead ───────────── -->
+    <section class="section section--paper" id="faq" data-station="Gateshead" data-label="FAQ">
+      <div class="container container--narrow">
+        <div class="station-sign" aria-hidden="true"><span class="station-sign__bar"></span>Gateshead</div>
+        <h2 class="section__title">
+          <span class="geordie" tabindex="0">Divvent<span class="geordie__gloss" role="tooltip">don&rsquo;t</span></span> panic
+        </h2>
+        <p class="section__lede">Frequently asked questions. If yours isn&rsquo;t here, just ask us.</p>
+
+        <div class="faq">
+          <details>
+            <summary>Who can come?</summary>
+            <p>Any student at a UK university or college, plus anyone who graduated in the last year. You need to be 18 or over on the day.</p>
+          </details>
+          <details>
+            <summary>How much does it cost?</summary>
+            <p>Nowt. Entry, food, drink and swag are all free, thanks to our sponsors.</p>
+          </details>
+          <details>
+            <summary>I&rsquo;ve never been to a hackathon. Is that a problem?</summary>
+            <p>Not at all. Plenty of people will be at their very first one. There are beginner workshops, mentors on hand all night, and a prize just for new teams.</p>
+          </details>
+          <details>
+            <summary>Do I need a team?</summary>
+            <p>Teams are up to four people. Come with mates, or turn up solo and join our team-forming session on Saturday morning.</p>
+          </details>
+          <details>
+            <summary>What should I bring?</summary>
+            <p>A laptop, charger, student ID, toothbrush and something warm. It&rsquo;s Newcastle in February and the locals will still be in T-shirts.</p>
+          </details>
+          <details>
+            <summary>How do I get there?</summary>
+            <p>Hop on the Metro. We&rsquo;re a short walk from the station, and we&rsquo;ll share the exact venue with confirmed hackers. Travel bursaries are available for students coming from further afield.</p>
+          </details>
+          <details>
+            <summary>Is there a code of conduct?</summary>
+            <p>Yes. In short: <span class="geordie" tabindex="0">gan canny<span class="geordie__gloss" role="tooltip">take care, be careful</span></span> and be kind. Harassment of any kind isn&rsquo;t tolerated. The full code of conduct will be published before registration closes.</p>
+          </details>
+        </div>
+
+        <div class="sponsors">
+          <h3 class="sponsors__title">Wor sponsors</h3>
+          <div class="sponsors__grid" aria-label="Sponsor logos coming soon">
+            <span>Your logo</span><span>Your logo</span><span>Your logo</span><span>Your logo</span>
+          </div>
+          <!-- TODO: replace with the real sponsorship contact address -->
+          <p class="sponsors__cta">Want to back the Toon&rsquo;s next generation of builders? <a href="mailto:hello@example.com">Get in touch</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── Register · Gateshead Stadium ───────────── -->
+    <section class="section section--ink register" id="register" data-station="Gateshead Stadium" data-label="Register">
+      <svg class="register__angel" viewBox="0 0 400 300" aria-hidden="true">
+        <!-- Angel of the North, wings ever so slightly forward -->
+        <path d="M6 70 L190 88 L190 80 Q200 64 210 80 L210 88 L394 70 L394 84 L212 108 L216 296 L184 296 L188 108 L6 84 Z" fill="currentColor"/>
+        <circle cx="200" cy="66" r="12" fill="currentColor"/>
+      </svg>
+
+      <div class="container register__inner">
+        <div class="register__intro">
+          <div class="station-sign station-sign--dark" aria-hidden="true"><span class="station-sign__bar"></span>Gateshead Stadium</div>
+          <h2 class="section__title">Get your ticket</h2>
+          <p class="section__lede">Registration takes two minutes. Places are first come, first served, so <span class="geordie" tabindex="0">divvent hang aboot<span class="geordie__gloss" role="tooltip">don&rsquo;t wait around</span></span>.</p>
+          <p class="register__note">This train terminates here. Please take all your belongings, and your laptop charger.</p>
+        </div>
+
+        <div class="register__panel">
+          <form class="form" data-form novalidate>
+            <div class="form__row form__row--2">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input id="first-name" name="firstName" autocomplete="given-name" required>
+                <p class="field__error" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input id="last-name" name="lastName" autocomplete="family-name" required>
+                <p class="field__error" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">University email</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@uni.ac.uk" required>
+              <p class="field__error" aria-live="polite"></p>
+            </div>
+
+            <div class="form__row form__row--2">
+              <div class="field">
+                <label for="uni">University</label>
+                <input id="uni" name="university" list="uni-list" required>
+                <datalist id="uni-list">
+                  <option value="Newcastle University">
+                  <option value="Northumbria University">
+                  <option value="Durham University">
+                  <option value="University of Sunderland">
+                  <option value="Teesside University">
+                </datalist>
+                <p class="field__error" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="level">Level of study</label>
+                <select id="level" name="level" required>
+                  <option value="">Choose one</option>
+                  <option>Undergraduate, 1st year</option>
+                  <option>Undergraduate, 2nd year</option>
+                  <option>Undergraduate, 3rd year+</option>
+                  <option>Postgraduate</option>
+                  <option>Graduated in the last year</option>
+                </select>
+                <p class="field__error" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <fieldset class="field">
+              <legend>Hackathons you&rsquo;ve been to</legend>
+              <div class="chips">
+                <label class="chip"><input type="radio" name="experience" value="0" required><span>This is my first</span></label>
+                <label class="chip"><input type="radio" name="experience" value="1-3"><span>1&ndash;3</span></label>
+                <label class="chip"><input type="radio" name="experience" value="4+"><span>4 or more</span></label>
+              </div>
+              <p class="field__error" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="form__row form__row--2">
+              <fieldset class="field">
+                <legend>Dietary requirements</legend>
+                <div class="chips">
+                  <label class="chip"><input type="checkbox" name="diet" value="vegetarian"><span>Vegetarian</span></label>
+                  <label class="chip"><input type="checkbox" name="diet" value="vegan"><span>Vegan</span></label>
+                  <label class="chip"><input type="checkbox" name="diet" value="halal"><span>Halal</span></label>
+                  <label class="chip"><input type="checkbox" name="diet" value="gluten-free"><span>Gluten-free</span></label>
+                </div>
+              </fieldset>
+              <div class="field">
+                <label for="tshirt">T-shirt size</label>
+                <select id="tshirt" name="tshirt" required>
+                  <option value="">Choose one</option>
+                  <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+                </select>
+                <p class="field__error" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="access">Accessibility needs or anything else we should know <span class="field__optional">(optional)</span></label>
+              <textarea id="access" name="access" rows="2"></textarea>
+            </div>
+
+            <div class="form__checks">
+              <label class="check"><input type="checkbox" name="conduct" required><span>I&rsquo;ll follow the code of conduct (aka gan canny).</span></label>
+              <label class="check"><input type="checkbox" name="age" required><span>I&rsquo;ll be 18 or over on 27 February 2027.</span></label>
+              <label class="check"><input type="checkbox" name="updates"><span>Send me the occasional update about future events. <span class="field__optional">(optional)</span></span></label>
+              <p class="field__error" data-checks-error aria-live="polite"></p>
+            </div>
+
+            <button class="btn btn--metro btn--block" type="submit" data-submit>
+              <span data-submit-label>Print my ticket</span>
+            </button>
+          </form>
+
+          <div class="ticket-slot" data-ticket hidden>
+            <div class="ticket" tabindex="-1">
+              <div class="ticket__top">
+                <span class="ticket__kind">Single &middot; Hacker</span>
+                <span class="ticket__no" data-ticket-no>HTT-0000</span>
+              </div>
+              <div class="ticket__route">
+                <div><small>From</small><strong>Wherever you are</strong></div>
+                <svg viewBox="0 0 60 12" aria-hidden="true"><path d="M2 6H54M48 1l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <div><small>To</small><strong>Hack the Toon</strong></div>
+              </div>
+              <div class="ticket__meta">
+                <div><small>Passenger</small><strong data-ticket-name>&nbsp;</strong></div>
+                <div><small>Valid</small><strong>27&ndash;28 Feb 2027</strong></div>
+              </div>
+              <div class="ticket__barcode" aria-hidden="true" data-barcode></div>
+            </div>
+            <h3 class="ticket-slot__title">Whey aye, <span data-ticket-first>pet</span>!</h3>
+            <p>You&rsquo;re on the list. Look out for a confirmation email with the venue and everything you need.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>Made in the Toon. Mind the gap between your commits.</p>
+      <p class="site-footer__small">Hack the Toon is an independent student event, not affiliated with Nexus or the Tyne and Wear Metro.</p>
+    </div>
+  </footer>
+
+  <!-- ───────────── Metro line: scroll progress + navigation ───────────── -->
+  <nav class="metro" aria-label="Sections" data-metro>
+    <div class="metro__display dotmatrix">
+      <span class="dotmatrix__dot" aria-hidden="true"></span>
+      <span data-metro-status>Next stop: Haymarket</span>
+    </div>
+    <div class="metro__track" data-metro-track>
+      <div class="metro__rail" aria-hidden="true"></div>
+      <ol class="metro__stations" data-metro-stations></ol>
+      <svg class="metro__train" data-metro-train viewBox="0 0 120 30" aria-hidden="true">
+        <!-- Two-car articulated set, cabs at both ends -->
+        <g>
+          <path d="M8 6 H56 V25 H5 Q2 25 2 22 V13 Q2 6 8 6 Z" fill="#e9e6df"/>
+          <path d="M64 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H64 Z" fill="#e9e6df"/>
+          <path d="M56 8 H64 V23 H56 Z" fill="#222"/>
+          <path d="M2 13 Q2 6 8 6 H12 V25 H5 Q2 25 2 22 Z" fill="var(--metro)"/>
+          <path d="M108 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H108 Z" fill="var(--metro)"/>
+          <rect x="5" y="9.5" width="102" height="5" rx="1" fill="#1b1f27"/>
+          <path d="M3.5 9.5 H9 V15 H3 Z M111 9.5 H116.5 L117 15 H111 Z" fill="#1b1f27"/>
+          <rect x="22" y="8" width="6" height="17" fill="var(--metro)"/>
+          <rect x="40" y="8" width="6" height="17" fill="var(--metro)"/>
+          <rect x="74" y="8" width="6" height="17" fill="var(--metro)"/>
+          <rect x="92" y="8" width="6" height="17" fill="var(--metro)"/>
+          <rect x="2" y="19" width="116" height="1.5" fill="#1b1f27" opacity=".55"/>
+          <circle cx="16" cy="27" r="2.6" fill="#1b1f27"/><circle cx="50" cy="27" r="2.6" fill="#1b1f27"/>
+          <circle cx="70" cy="27" r="2.6" fill="#1b1f27"/><circle cx="104" cy="27" r="2.6" fill="#1b1f27"/>
+        </g>
+      </svg>
+    </div>
+  </nav>
+</body>
+</html>
