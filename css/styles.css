@@ -21,11 +21,19 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* The colour at the very top of the sky and the very bottom of the river.
+   Browsers paint this behind the page wherever it doesn't reach: Safari on
+   iOS fills its status bar and toolbar strips with the page's background
+   colour, and it also shows when the page is pulled past either end. Using
+   the same colour for both edges of the artwork makes those strips read as
+   more sky and more river. */
+html,
+body { background: #0a101b; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: #080c14;
   color: var(--paper);
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -174,7 +182,9 @@ h1, h2 {
   height: 65%;
   pointer-events: none;
 }
-.page__stars circle { animation: twinkle 4s ease-in-out infinite; }
+/* Animated as whole layers (not per star or per window) so the browser can
+   composite them rather than repainting on every frame. */
+.page__stars--twinkle { animation: twinkle 4s ease-in-out infinite; will-change: opacity; }
 @keyframes twinkle { 50% { opacity: 0.25; } }
 
 .site-header {
@@ -207,15 +217,21 @@ h1, h2 {
   min-height: min(220px, 60vw);
   pointer-events: none;
 }
+/* The skyline is a stack of SVG layers (built in js/scenes.js): the static
+   artwork, then layers for the moving parts, each animated as a whole. */
 .skyline { position: absolute; inset: 0; width: 100%; height: 100%; }
-.skyline .win { fill: #ffd27a; }
-.skyline .win--twinkle { animation: twinkle 5s ease-in-out infinite; }
-.skyline .shimmer { animation: shimmer 6s ease-in-out infinite; }
-.skyline .led-cycle { animation: led-cycle 16s linear infinite; }
+.skyline--lights-a,
+.skyline--lights-b { animation: twinkle 5s ease-in-out infinite; will-change: opacity; }
+.skyline--lights-b { animation-delay: -2.5s; }
+.skyline--shimmer-a,
+.skyline--shimmer-b { animation: shimmer 6s ease-in-out infinite; will-change: transform, opacity; }
+.skyline--shimmer-b { animation-delay: -3s; }
+/* The Millennium Bridge's LEDs slowly cycle through the rainbow */
+.skyline--bridge { animation: led-cycle 16s linear infinite; will-change: filter; }
 @keyframes led-cycle { to { filter: hue-rotate(360deg); } }
 @keyframes shimmer {
-  0%, 100% { transform: translateX(0); opacity: 0.6; }
-  50% { transform: translateX(14px); opacity: 0.25; }
+  0%, 100% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(14px); opacity: 0.4; }
 }
 
 .site-footer {
@@ -234,6 +250,9 @@ h1, h2 {
   grid-template-columns: 1fr 1fr;
   gap: clamp(32px, 6vw, 88px);
   align-items: center;
+  /* Rows keep their natural height and centre as a block (fitAboveSkyline
+     in js/scenes.js measures them) */
+  align-content: center;
   width: min(1180px, 100%);
   margin: 0 auto;
   padding: clamp(24px, 5vh, 64px) var(--gutter) var(--scene-reserve);
@@ -432,7 +451,7 @@ h1, h2 {
 }
 
 @media (min-width: 881px) {
-  .page--interest .skyline { transform: scaleX(-1); }
+  .page--interest .scene { transform: scaleX(-1); }
 }
 
 @media (max-width: 880px) {

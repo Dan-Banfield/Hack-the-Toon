@@ -87,7 +87,7 @@
     const w = p(96), h = p(150);
     let slits = "";
     for (let i = 0; i < 5; i++) {
-      slits += `<rect class="win" x="${r1(x + p(20) + i * p(14))}" y="${r1(b - h + p(22))}" width="${p(3)}" height="${r1(h - p(40))}" opacity=".35"/>`;
+      slits += `<rect x="${r1(x + p(20) + i * p(14))}" y="${r1(b - h + p(22))}" width="${p(3)}" height="${r1(h - p(40))}" opacity=".35"/>`;
     }
     return {
       shape: `
@@ -164,6 +164,7 @@
       const type = TYPES[Math.floor(rand() * TYPES.length)];
       const X = r1(x), R = r1(x + w), T = r1(top);
       let roof = "";
+      let mast = "";
       let bodyTop = top;
       let winW = 4, winH = 6, rowGap = 13;
 
@@ -226,7 +227,8 @@
           bodyTop = top - 36;
           roof += `<rect x="${r1(x + w * 0.2)}" y="${r1(bodyTop - 12)}" width="${r1(w * 0.6)}" height="12"/>
                    <rect x="${r1(x + w / 2 - 1)}" y="${r1(bodyTop - 34)}" width="2" height="22"/>
-                   <circle class="win win--twinkle" cx="${r1(x + w / 2)}" cy="${r1(bodyTop - 35)}" r="1.8" fill="#ff6b5a" style="animation-delay:${r1(rand() * 5)}s"/>`;
+`;
+          mast = `<circle cx="${r1(x + w / 2)}" cy="${r1(bodyTop - 35)}" r="1.8" fill="#ff6b5a"/>`;
           break;
         }
         case "warehouse": {
@@ -243,26 +245,31 @@
       }
 
       const shape = `<rect x="${X}" y="${r1(bodyTop)}" width="${r1(w)}" height="${r1(B - bodyTop)}"/>${roof}`;
-      let wins = "";
+      // Lit windows. Most stay on; a few belong to one of two "twinkle"
+      // groups, which are drawn on their own layers and fade in turn.
+      const wins = { on: "", a: "", b: "" };
       if (withWindows) {
         for (let wy = bodyTop + 10; wy < B - 14; wy += rowGap) {
           for (let wx = x + 6; wx < x + w - 8; wx += 11) {
             if (rand() < 0.17) {
-              const tw = rand() < 0.25 ? " win--twinkle" : "";
-              wins += `<rect class="win${tw}" x="${r1(wx)}" y="${r1(wy)}" width="${winW}" height="${winH}" rx="${type === "grainger" ? 2 : 0}" opacity="${r1(0.45 + rand() * 0.5)}" style="animation-delay:${r1(rand() * 5)}s"/>`;
+              const r = rand();
+              const group = r < 0.12 ? "a" : r < 0.24 ? "b" : "on";
+              wins[group] += `<rect x="${r1(wx)}" y="${r1(wy)}" width="${winW}" height="${winH}" rx="${type === "grainger" ? 2 : 0}" opacity="${r1(0.45 + rand() * 0.5)}"/>`;
             }
           }
         }
         // Now and then a lit shopfront along the ground floor.
         if (rand() < 0.3 && w > 30) {
-          wins += `<rect class="win" x="${r1(x + 4)}" y="${B - 11}" width="${r1(w - 8)}" height="6" opacity=".4"/>`;
+          wins.on += `<rect x="${r1(x + 4)}" y="${B - 11}" width="${r1(w - 8)}" height="6" opacity=".4"/>`;
         }
       }
+      if (mast) wins[rand() < 0.5 ? "a" : "b"] += mast;
       return { shape, wins };
     }
 
     function rooftops(xStart, xEnd, minH, maxH, withWindows, avoid = []) {
-      let shapes = "", wins = "";
+      let shapes = "";
+      const wins = { on: "", a: "", b: "" };
       let x = xStart;
       while (x < xEnd) {
         const w = 28 + rand() * 60;
@@ -270,7 +277,9 @@
         if (!avoid.some(([a, z]) => x + w > a && x < z)) {
           const b = building(x, w, B - h, withWindows);
           shapes += b.shape;
-          wins += b.wins;
+          wins.on += b.wins.on;
+          wins.a += b.wins.a;
+          wins.b += b.wins.b;
         }
         x += w + (rand() < 0.25 ? 6 + rand() * 10 : 0);
       }
@@ -283,23 +292,68 @@
 
     const bridge = millenniumBridge({ x0: 900, x1: 1430, y: B - 8, archH: 205, deckH: 9 });
 
-    // River with reflected lights; under the bridge they pick up its colours.
+    // River ripples, fading out with depth so nothing is cut off at the
+    // bottom edge. Under the bridge they pick up its colours. They're split
+    // into two layers that drift out of step with each other.
     const ledColours = ["#ff5a6e", "#ffb347", "#ffe36e", "#5fe39a", "#5fd4ff", "#8f7bff", "#ff6bd6"];
-    let shimmer = "";
+    const shimmer = { a: "", b: "" };
     for (let i = 0; i < 52; i++) {
       const x = rand() * W;
-      const y = B + 8 + rand() * 60;
+      const depth = rand();
+      const y = B + 8 + depth * 46;
       const w = 10 + rand() * 50;
       const c = x > 880 && x < 1450 && rand() < 0.7 ? ledColours[Math.floor(rand() * ledColours.length)] : "#ffd27a";
-      shimmer += `<rect class="shimmer" x="${r1(x)}" y="${r1(y)}" width="${r1(w)}" height="1.6" rx=".8" fill="${c}" opacity=".5" style="animation-delay:${r1(rand() * 6)}s"/>`;
+      shimmer[i % 2 ? "a" : "b"] += `<rect x="${r1(x)}" y="${r1(y)}" width="${r1(w)}" height="1.6" rx=".8" fill="${c}" opacity="${r1(0.55 * (1 - depth * 0.75))}"/>`;
     }
 
+    // The river fades to the same colour as the top of the sky and the page
+    // background, so it runs on seamlessly into whatever the browser shows
+    // below the page (on iOS, Safari fills that strip with one flat colour).
     svg.innerHTML = `
       <defs>
-        <linearGradient id="river" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="river" gradientUnits="userSpaceOnUse" x1="0" y1="${B}" x2="0" y2="520">
           <stop offset="0" stop-color="#2a2540"/>
-          <stop offset="1" stop-color="#0d1420"/>
+          <stop offset=".85" stop-color="#0a101b"/>
         </linearGradient>
+      </defs>
+      <g fill="#4a3a5a" color="#4a3a5a">
+        ${far.shapes}
+        ${stJamesPark(120, B, 1.05)}
+        ${cathedral(500, B, 1)}
+        ${sage(690, B, 1)}
+      </g>
+      <g fill="#221d33" color="#221d33">
+        ${mid.shapes}${greysMonument(585, B, 1)}${castleKeep(700, B, 0.95)}${balticMill.shape}
+      </g>
+      <g fill="#ffd27a">${mid.wins.on}${balticMill.wins}</g>
+      <rect x="0" y="${B}" width="${W}" height="${520 - B}" fill="url(#river)"/>
+      <rect x="0" y="${B}" width="${W}" height="2" fill="#151827"/>`;
+
+    // Truss lines on the stadium pick up the far colour as a stroke.
+    svg.querySelectorAll(".truss").forEach((g) => g.setAttribute("stroke", "#5d4b6d"));
+
+    // Everything that moves goes on its own layer above the static artwork,
+    // and is animated as a whole (opacity, transform or filter). That lets
+    // the browser composite it instead of repainting the skyline every
+    // frame, which keeps scrolling smooth on phones.
+    const layer = (cls, markup) => {
+      const el = document.createElementNS(NS, "svg");
+      el.setAttribute("class", `skyline ${cls}`);
+      el.setAttribute("viewBox", svg.getAttribute("viewBox"));
+      el.setAttribute("preserveAspectRatio", svg.getAttribute("preserveAspectRatio"));
+      el.setAttribute("aria-hidden", "true");
+      el.innerHTML = markup;
+      svg.parentNode.appendChild(el);
+      return el;
+    };
+
+    layer("skyline--lights-a", `<g fill="#ffd27a">${mid.wins.a}</g>`);
+    layer("skyline--lights-b", `<g fill="#ffd27a">${mid.wins.b}</g>`);
+
+    // The bridge and its reflection. The reflection fades out before the
+    // bottom edge of the artwork.
+    layer("skyline--bridge", `
+      <defs>
         <linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="900" y1="0" x2="1430" y2="0">
           <stop offset="0" stop-color="#ff3b5c"/>
           <stop offset=".17" stop-color="#ff9a3c"/>
@@ -315,38 +369,41 @@
         <filter id="ripple" x="-5%" y="-20%" width="110%" height="140%">
           <feGaussianBlur stdDeviation="2.5 1"/>
         </filter>
-        <clipPath id="riverClip"><rect x="0" y="${B}" width="${W}" height="80"/></clipPath>
+        <linearGradient id="reflectionFade" gradientUnits="userSpaceOnUse" x1="0" y1="${B}" x2="0" y2="${B + 56}">
+          <stop offset="0" stop-color="#fff"/>
+          <stop offset="1" stop-color="#000"/>
+        </linearGradient>
+        <mask id="reflectionMask" maskUnits="userSpaceOnUse" x="0" y="${B}" width="${W}" height="${520 - B}">
+          <rect x="0" y="${B}" width="${W}" height="${520 - B}" fill="url(#reflectionFade)"/>
+        </mask>
       </defs>
-      <g class="layer-far" fill="#4a3a5a" color="#4a3a5a">
-        ${far.shapes}
-        ${stJamesPark(120, B, 1.05)}
-        ${cathedral(500, B, 1)}
-        ${sage(690, B, 1)}
-      </g>
-      <g class="layer-mid" fill="#221d33" color="#221d33" stroke="#221d33">
-        <g stroke="none">${mid.shapes}${greysMonument(585, B, 1)}${castleKeep(700, B, 0.95)}${balticMill.shape}</g>
-        <g stroke="none">${mid.wins}${balticMill.wins}</g>
-      </g>
-      <g class="led-cycle">${bridge}</g>
-      <rect x="0" y="${B}" width="${W}" height="80" fill="url(#river)"/>
-      <rect x="0" y="${B}" width="${W}" height="2" fill="#151827"/>
-      <g clip-path="url(#riverClip)">
-        <g class="led-cycle" opacity=".38" filter="url(#ripple)" transform="translate(0 ${2 * B - 8}) scale(1 -1)">${bridge}</g>
-      </g>
-      <g>${shimmer}</g>`;
+      ${bridge}
+      <g mask="url(#reflectionMask)">
+        <g opacity=".38" filter="url(#ripple)" transform="translate(0 ${2 * B - 8}) scale(1 -1)">${bridge}</g>
+      </g>`);
 
-    // Truss lines on the stadium pick up the far colour as a stroke.
-    svg.querySelectorAll(".truss").forEach((g) => g.setAttribute("stroke", "#5d4b6d"));
+    layer("skyline--shimmer-a", shimmer.a);
+    layer("skyline--shimmer-b", shimmer.b);
   }
 
+  // Stars. Most are still; about a third sit on a second layer that slowly
+  // fades in and out as a whole (cheap to animate, see the skyline layers).
   function buildStars(svg) {
     const rand = rng(7);
-    let out = "";
+    let still = "", twinkle = "";
     for (let i = 0; i < 110; i++) {
       const y = Math.pow(rand(), 1.6) * 420;
-      out += `<circle cx="${r1(rand() * 1600)}" cy="${r1(y)}" r="${r1(0.5 + rand() * 1.3)}" fill="#fff" opacity="${r1(0.3 + rand() * 0.6)}" style="animation-delay:${r1(rand() * 4)}s"/>`;
+      const star = `<circle cx="${r1(rand() * 1600)}" cy="${r1(y)}" r="${r1(0.5 + rand() * 1.3)}" opacity="${r1(0.3 + rand() * 0.6)}"/>`;
+      if (rand() < 0.35) twinkle += star;
+      else still += star;
     }
-    svg.innerHTML = out;
+    svg.innerHTML = `<g fill="#fff">${still}</g>`;
+
+    const el = svg.cloneNode(false);
+    el.removeAttribute("data-stars");
+    el.classList.add("page__stars--twinkle");
+    el.innerHTML = `<g fill="#fff">${twinkle}</g>`;
+    svg.after(el);
   }
 
   // Pad the bottom of `main` so its content sits clear of the skyline:
@@ -362,25 +419,42 @@
     const ART = 0.58;
     const GAP = 24;
 
-    function fit() {
-      const art = scene.getBoundingClientRect().height * ART + GAP;
-      // Measure the content's natural height with no bottom padding.
-      main.style.paddingBottom = "0px";
-      main.style.flex = "none";
-      const box = main.getBoundingClientRect();
-      main.style.flex = "";
-      // Anything above main (a header, if there is one) also takes up room.
-      const room = window.innerHeight - (box.top + window.scrollY) - box.height;
-
-      let pad;
-      if (room >= art) pad = art;
-      else if (room >= 0) pad = room;
-      else pad = art;
-      main.style.paddingBottom = `${Math.round(pad)}px`;
+    // The content's own height, from its layout (offsets ignore the rise-in
+    // animation's transforms). This never changes main's styles, so it can't
+    // make the page jump.
+    function contentHeight() {
+      let top = Infinity, bottom = -Infinity;
+      for (const el of main.children) {
+        if (!el.offsetHeight) continue;
+        top = Math.min(top, el.offsetTop);
+        bottom = Math.max(bottom, el.offsetTop + el.offsetHeight);
+      }
+      return bottom > top ? bottom - top : 0;
     }
 
+    function fit() {
+      const padTop = parseFloat(getComputedStyle(main).paddingTop) || 0;
+      const mainTop = main.getBoundingClientRect().top + window.scrollY;
+      const room = window.innerHeight - (mainTop + padTop + contentHeight());
+      const art = scene.offsetHeight * ART + GAP;
+
+      const pad = room >= art ? art : room >= 0 ? room : art;
+      const px = `${Math.round(pad)}px`;
+      if (main.style.paddingBottom !== px) main.style.paddingBottom = px;
+    }
+
+    // On phones the browser's toolbars grow and shrink as you scroll, and
+    // each change fires a resize. Re-laying out the page mid-scroll makes it
+    // jump, so there we only refit when the width changes (e.g. rotation).
+    const touch = matchMedia("(pointer: coarse)").matches;
+    let lastWidth = window.innerWidth;
+    window.addEventListener("resize", () => {
+      if (touch && window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      fit();
+    });
+
     fit();
-    window.addEventListener("resize", fit);
     window.addEventListener("load", fit);
     if (document.fonts) document.fonts.ready.then(fit);
     return fit;
