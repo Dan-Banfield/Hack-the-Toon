@@ -1,8 +1,8 @@
 # Hack the Toon
 
-Landing and registration site for **Hack the Toon**, a 24-hour student hackathon in Newcastle upon Tyne.
+Website for **Hack the Toon**, a 24-hour student hackathon in Newcastle upon Tyne.
 
-This is a first draft of the front end. It's plain HTML, CSS and JavaScript with no build step.
+Right now it's a single "register your interest" page and a thank-you page. It's plain HTML, CSS and JavaScript with no build step.
 
 ## Run it locally
 
@@ -11,34 +11,30 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-Opening `index.html` directly also works.
-
 ## Structure
 
 ```
-index.html        All page content and sections
-css/styles.css    Design tokens, layout and components
-js/scenes.js      SVG illustrations: the night skyline and the Millennium Bridge crossing
-js/main.js        Metro progress bar, departures board, scroll effects, registration form
+index.html        Register your interest: name and email
+thanks.html       Animated thank-you page shown after signing up
+css/styles.css    Design tokens, layout and components for both pages
+js/scenes.js      SVG skyline (Tyne Bridge, St James' Park, cathedral, Grey's Monument, Castle Keep) and stars
+js/main.js        Form validation and redirect to the thank-you page
+js/thanks.js      Thank-you page: greeting, Metro display text, fireworks
 assets/           Favicon
 ```
 
-## The Newcastle touches
+## How it behaves
 
-- **Metro line nav.** The bar fixed to the bottom of the page is a Tyne and Wear Metro-style line diagram. A two-car train moves along it as you scroll and stops at a station for each section: Jesmond, Haymarket, Monument, Central, Gateshead, Gateshead Stadium (the real order of the stops, crossing the river). The dot-matrix display shows the next stop. Click a station to jump to that section.
-- **Hero skyline** at dusk: the Tyne Bridge, St James' Park, the lantern tower of St Nicholas Cathedral, Grey's Monument and the Castle Keep, with lit windows and reflections on the river.
-- **Crossing the Tyne** (between Central and Gateshead, where the Metro crosses the river). It's dawn, around hour 20 of the hack. The Gateshead Millennium Bridge tilts open as you scroll, the sun rises, and a yacht passes under. BALTIC and the Sage/Glasshouse are on the Gateshead bank, the Tyne Bridge is upstream, and there are kittiwakes.
-- **Timetable** as a dot-matrix departures board with a live clock.
-- **Tracks** shown as coloured Metro lines.
-- **Angel of the North** behind the registration form, which is at the Gateshead end of the line.
-- **Tickets.** Registering prints a ticket.
-- **Geordie words** (bait, champion, divvent, gan canny) have a dotted underline. Hover over or tab to one to see its translation.
+- **Register your interest.** Name and email, validated in the browser. On submit, the first name is saved to `sessionStorage` and the browser goes to `thanks.html`. **Nothing is sent anywhere yet.** Look for the `TODO` in `js/main.js` to connect a backend.
+- **Thank you.** A Metro train pulls into a "Hack the Toon" station and the doors open. The dot-matrix display switches to "You're on the list", the page greets the visitor by first name ("Whey aye, Alex!"), and fireworks go off over the Quayside. With reduced motion turned on, the page shows the final state straight away.
+
+## Newcastle touches
+
+- Night-time skyline with the Tyne Bridge. On wide screens it's mirrored so the bridge sits under the headline rather than behind the form.
+- Metro yellow, a dot-matrix display in the style of the Metro's passenger screens, and a platform-style station sign.
+- Geordie words (bait, gan canny) have a dotted underline. Hover over or tab to one to see its translation.
 - Headings use Zilla Slab, a nod to Margaret Calvert's slab-serif lettering for the Metro.
 
-## Placeholders to replace
+## History
 
-- Dates (27–28 Feb 2027), venue, capacity (300) and the schedule
-- Track names and prize categories
-- Sponsor logos and the contact email (`hello@example.com`)
-- Code of conduct link
-- **Form submission.** `js/main.js` validates the form, then shows the ticket without sending any data. Look for the `TODO` in the submit handler to connect it to a backend.
+The first draft was a full multi-section site: a Metro line navigation bar, departures-board timetable, tracks, FAQ, a Millennium Bridge that tilts on scroll, and a full registration form with a printed ticket. It's in the initial commit (`de34bb7`) if it's needed again.

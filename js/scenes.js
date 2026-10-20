@@ -1,7 +1,6 @@
 /*
  * Illustrated scenes, drawn as SVG at runtime so they stay crisp and are
- * easy to tweak: the night-time skyline in the hero, and the dawn crossing
- * of the Tyne with the Gateshead Millennium Bridge.
+ * easy to tweak: Newcastle's skyline at dusk, and a starry sky.
  */
 (function () {
   "use strict";
@@ -20,15 +19,6 @@
   }
 
   const r1 = (n) => Math.round(n * 10) / 10;
-
-  // Point on a quadratic curve from (x0,y) to (x1,y) whose apex is `h` above y.
-  function quadPoint(x0, x1, y, h, s) {
-    const xm = (x0 + x1) / 2;
-    const cy = y - 2 * h;
-    const u = 1 - s;
-    return [u * u * x0 + 2 * u * s * xm + s * s * x1, u * u * y + 2 * u * s * cy + s * s * y];
-  }
-  const quadPath = (x0, x1, y, h) => `M${r1(x0)} ${r1(y)} Q${r1((x0 + x1) / 2)} ${r1(y - 2 * h)} ${r1(x1)} ${r1(y)}`;
 
   /* ---------------------------------------------------------------------
      Landmarks. Each returns SVG markup standing on baseline `b`.
@@ -251,164 +241,5 @@
     svg.innerHTML = out;
   }
 
-  /* ---------------------------------------------------------------------
-     Crossing: dawn on the Tyne. The Millennium Bridge tilts as `t` goes 0→1.
-     --------------------------------------------------------------------- */
-  function buildCrossing(svg) {
-    const rand = rng(2001); // the year the Millennium Bridge was lifted into place
-    const W = 1600;
-    const H = 760;
-    const quay = 600;
-    const xL = 300;
-    const xR = 1250;
-    const ink = "#3a2433";
-
-    // Distant city and the Tyne Bridge upstream, softened by morning haze.
-    let distant = "";
-    for (let x = 0; x < W; ) {
-      const w = 20 + rand() * 50;
-      const h = 14 + rand() * 50;
-      distant += `<rect x="${r1(x)}" y="${r1(560 - h)}" width="${r1(w)}" height="${r1(h)}"/>`;
-      x += w;
-    }
-    const farBridge = tyneBridge({
-      x0: 640, x1: 900, river: 562, deckY: 517, apexY: 462,
-      towerW: 20, towerTop: 470,
-      archColor: "#a76a74", towerColor: "#b98081", deckColor: "#a76a74",
-      lamps: false, extendL: 120, extendR: 140,
-    });
-
-    // Newcastle quayside (left) and Gateshead with BALTIC and Sage (right).
-    let leftBank = "";
-    for (let x = -10; x < xL - 20; ) {
-      const w = 34 + rand() * 46;
-      const h = 60 + rand() * 120;
-      leftBank += rand() < 0.4
-        ? `<path d="M${r1(x)} ${quay} V${r1(quay - h)} L${r1(x + w / 2)} ${r1(quay - h - w * 0.3)} L${r1(x + w)} ${r1(quay - h)} V${quay}Z"/>`
-        : `<rect x="${r1(x)}" y="${r1(quay - h)}" width="${r1(w)}" height="${r1(h)}"/>`;
-      x += w;
-    }
-
-    const baltic = `
-      <rect x="1290" y="${quay - 250}" width="120" height="250"/>
-      <rect x="1282" y="${quay - 262}" width="16" height="262"/>
-      <rect x="1402" y="${quay - 262}" width="16" height="262"/>
-      <g fill="#f4c7a1" opacity=".18">
-        ${Array.from({ length: 6 }, (_, i) => `<rect x="${1306 + i * 16}" y="${quay - 236}" width="6" height="220"/>`).join("")}
-      </g>`;
-
-    // The Glasshouse (née Sage Gateshead): three rolling shells of glass and steel.
-    const sage = (() => {
-      const shells = [
-        [1430, 1560, 150],
-        [1490, 1660, 205],
-        [1600, 1720, 140],
-      ];
-      return shells.map(([a, z, h]) => {
-        let ribs = "";
-        for (let i = 1; i < 7; i++) {
-          const x = a + ((z - a) * i) / 7;
-          const k = 1 - Math.pow((x - (a + z) / 2) / ((z - a) / 2), 2);
-          ribs += `M${r1(x)} ${quay} V${r1(quay - 40 - (h - 40) * k)}`;
-        }
-        return `<path d="M${a} ${quay} C${a} ${quay - h * 1.25} ${z} ${quay - h * 1.25} ${z} ${quay}Z" fill="#5a3a4d"/>
-                <path d="${ribs}" stroke="#f4c7a1" stroke-opacity=".16" stroke-width="2"/>`;
-      }).join("");
-    })();
-
-    // Kittiwakes: the Tyne's famous urban seabirds.
-    const birds = [[980, 170, 0.8], [1030, 150, 0.7], [1080, 190, 0.9], [1150, 214, 1], [1210, 176, 0.75]]
-      .map(([x, y, s]) => `<path class="bird" d="M${x - 12 * s} ${y} q${6 * s} ${-7 * s} ${12 * s} 0 q${6 * s} ${-7 * s} ${12 * s} 0" fill="none" stroke="${ink}" stroke-width="2.2" stroke-linecap="round"/>`)
-      .join("");
-
-    let shimmer = "";
-    for (let i = 0; i < 40; i++) {
-      const y = quay + 18 + rand() * 130;
-      const nearSun = rand() < 0.5;
-      const x = nearSun ? 920 + (rand() - 0.5) * 160 : rand() * W;
-      shimmer += `<rect x="${r1(x)}" y="${r1(y)}" width="${r1(16 + rand() * 60)}" height="2" rx="1" fill="#fff4dc" opacity="${nearSun ? 0.7 : 0.35}"/>`;
-    }
-
-    svg.innerHTML = `
-      <defs>
-        <linearGradient id="dawn" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#f6e2c9"/>
-          <stop offset=".55" stop-color="#f6c49f"/>
-          <stop offset=".78" stop-color="#ef9f84"/>
-        </linearGradient>
-        <linearGradient id="tyne" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#d98a83"/>
-          <stop offset="1" stop-color="#8c5568"/>
-        </linearGradient>
-        <radialGradient id="sunGlow">
-          <stop offset="0" stop-color="#fff6df" stop-opacity=".95"/>
-          <stop offset=".35" stop-color="#ffe2b0" stop-opacity=".5"/>
-          <stop offset="1" stop-color="#ffd09a" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="${W}" height="${H}" fill="url(#dawn)"/>
-      <g data-sun>
-        <circle cx="920" cy="0" r="260" fill="url(#sunGlow)"/>
-        <circle cx="920" cy="0" r="62" fill="#fff3d8"/>
-      </g>
-      <g fill="#d39a8e">${distant}</g>
-      ${farBridge}
-      <rect x="0" y="560" width="${W}" height="${H - 560}" fill="url(#tyne)"/>
-      <g>${shimmer}</g>
-      <g fill="${ink}">${leftBank}<rect x="-10" y="${quay}" width="${xL + 40}" height="${H - quay}"/></g>
-      <g fill="${ink}">${baltic}${sage}<rect x="${xR - 20}" y="${quay}" width="${W - xR + 40}" height="${H - quay}"/></g>
-      <g data-mbridge stroke="${ink}" fill="none" stroke-linecap="round"></g>
-      <g fill="${ink}">
-        <path d="M${xL - 40} ${quay + 50} L${xL} ${quay - 4} L${xL + 22} ${quay + 50}Z"/>
-        <path d="M${xR - 22} ${quay + 50} L${xR} ${quay - 4} L${xR + 40} ${quay + 50}Z"/>
-      </g>
-      <g data-boat fill="${ink}" style="opacity:0">
-        <path d="M-60 0 H60 L44 22 H-46 Z"/>
-        <rect x="-3" y="-120" width="5" height="120"/>
-        <path d="M5 -112 L58 -10 H5 Z" opacity=".8"/>
-        <path d="M-3 -100 L-46 -12 H-3 Z" opacity=".55"/>
-      </g>
-      <g>${birds}</g>`;
-
-    const sun = svg.querySelector("[data-sun]");
-    const boat = svg.querySelector("[data-boat]");
-    const bridge = svg.querySelector("[data-mbridge]");
-
-    const ease = (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
-    const clamp01 = (x) => Math.max(0, Math.min(1, x));
-
-    // At rest the arch stands tall and the deck lies flat; as the bridge
-    // rotates about its pivots the arch lowers and the deck lifts into an arch.
-    return function update(p) {
-      const t = ease(clamp01((p - 0.08) / 0.5));
-      const archH = 380 - 190 * t;
-      const deckH = 10 + 165 * t;
-
-      let cables = "";
-      const C = 18;
-      for (let i = 1; i < C; i++) {
-        const s = i / C;
-        const [ax, ay] = quadPoint(xL, xR, quay, archH, s);
-        const [dx, dy] = quadPoint(xL, xR, quay, deckH, s);
-        cables += `M${r1(ax)} ${r1(ay)} L${r1(dx)} ${r1(dy)}`;
-      }
-
-      bridge.innerHTML = `
-        <path d="${cables}" stroke-width="1.6" opacity=".75"/>
-        <path d="${quadPath(xL, xR, quay, archH)}" stroke-width="13"/>
-        <path d="${quadPath(xL, xR, quay, deckH)}" stroke-width="10"/>
-        <path d="${quadPath(xL + 6, xR - 6, quay - 14, deckH - 4)}" stroke-width="2"/>`;
-
-      sun.setAttribute("transform", `translate(0 ${r1(590 - 150 * clamp01(p))})`);
-
-      // Once the bridge is open, a yacht comes downriver underneath it,
-      // towards the viewer.
-      const b = clamp01((p - 0.6) / 0.38);
-      const scale = 0.3 + 1.2 * b * b;
-      boat.setAttribute("transform", `translate(${r1((xL + xR) / 2 - 30 * b)} ${r1(578 + 200 * b * b)}) scale(${r1(scale * 100) / 100})`);
-      boat.style.opacity = clamp01(Math.min(b * 8, (1 - b) * 6));
-    };
-  }
-
-  window.HTT = { buildSkyline, buildStars, buildCrossing };
+  window.HTT = { buildSkyline, buildStars };
 })();

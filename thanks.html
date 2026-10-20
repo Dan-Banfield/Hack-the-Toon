@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hack the Toon · Thank you</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d1420">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DotGothic16&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/scenes.js" defer></script>
+  <script src="js/thanks.js" defer></script>
+</head>
+<body>
+  <div class="page page--thanks">
+    <svg class="page__stars" data-stars viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+    <!-- Fireworks over the Quayside, once the train pulls in -->
+    <svg class="page__fireworks" data-fireworks viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+
+    <header class="site-header">
+      <a class="brand" href="./">
+        <svg class="brand__mark" viewBox="0 0 48 32" aria-hidden="true">
+          <path d="M4 28 Q24 -6 44 28" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M2 20 H46" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <path d="M14 12.5V20 M19 9V20 M24 7.8V20 M29 9V20 M34 12.5V20" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="24" cy="27" r="2.6" fill="var(--metro)"/>
+        </svg>
+        <span class="brand__name">Hack the Toon</span>
+      </a>
+    </header>
+
+    <main class="thanks">
+      <div class="arrival" aria-hidden="true">
+        <p class="dotmatrix arrival__display">
+          <span class="dotmatrix__dot"></span>
+          <span data-display>Now arriving: Hack the Toon</span>
+        </p>
+
+        <svg class="arrival__scene" viewBox="0 0 900 170">
+          <!-- Station sign on its posts -->
+          <g class="arrival__sign">
+            <rect x="404" y="8" width="5" height="40" fill="#2b3346"/>
+            <rect x="491" y="8" width="5" height="40" fill="#2b3346"/>
+            <rect x="330" y="0" width="240" height="34" rx="17" fill="#f3ece0"/>
+            <circle cx="350" cy="17" r="9" fill="#f3ece0" stroke="#ffc72c" stroke-width="5"/>
+            <text x="462" y="23" text-anchor="middle" font-family="Zilla Slab, Georgia, serif" font-weight="700" font-size="17" fill="#15191f">Hack the Toon</text>
+          </g>
+
+          <!-- Track -->
+          <path class="arrival__rail" d="M-2000 158 H2900" stroke="#3a4357" stroke-width="3"/>
+          <path class="arrival__sleepers" d="M-2000 163 H2900" stroke="#2a3142" stroke-width="5" stroke-dasharray="4 14"/>
+
+          <!-- Two-car articulated set, cabs at both ends. Drawn at 120×30 and scaled up. -->
+          <g class="arrival__train">
+            <g transform="translate(258 62) scale(3.2)">
+              <path d="M8 6 H56 V25 H5 Q2 25 2 22 V13 Q2 6 8 6 Z" fill="#e9e6df"/>
+              <path d="M64 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H64 Z" fill="#e9e6df"/>
+              <path d="M56 8 H64 V23 H56 Z" fill="#222"/>
+              <path d="M2 13 Q2 6 8 6 H12 V25 H5 Q2 25 2 22 Z" fill="#ffc72c"/>
+              <path d="M108 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H108 Z" fill="#ffc72c"/>
+              <rect x="5" y="9.5" width="102" height="5" rx="1" fill="#1b1f27"/>
+              <path d="M3.5 9.5 H9 V15 H3 Z M111 9.5 H116.5 L117 15 H111 Z" fill="#1b1f27"/>
+              <g class="arrival__doors">
+                <g><rect x="22" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="22" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="25" y="8" width="3" height="17" fill="#ffc72c"/></g>
+                <g><rect x="40" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="40" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="43" y="8" width="3" height="17" fill="#ffc72c"/></g>
+                <g><rect x="74" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="74" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="77" y="8" width="3" height="17" fill="#ffc72c"/></g>
+                <g><rect x="92" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="92" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="95" y="8" width="3" height="17" fill="#ffc72c"/></g>
+              </g>
+              <rect x="2" y="19" width="116" height="1.5" fill="#1b1f27" opacity=".55"/>
+              <circle class="arrival__headlight" cx="116.5" cy="20.5" r="1.2" fill="#fff7d6"/>
+              <circle cx="16" cy="27" r="2.6" fill="#1b1f27"/><circle cx="50" cy="27" r="2.6" fill="#1b1f27"/>
+              <circle cx="70" cy="27" r="2.6" fill="#1b1f27"/><circle cx="104" cy="27" r="2.6" fill="#1b1f27"/>
+            </g>
+          </g>
+
+          <!-- Platform edge -->
+          <rect x="-2000" y="166" width="4900" height="4" fill="#ffc72c" opacity=".9"/>
+        </svg>
+      </div>
+
+      <div class="thanks__copy">
+        <p class="thanks__kicker" data-greeting>Whey aye!</p>
+        <h1 class="thanks__title">Thank you for your interest.</h1>
+        <p class="thanks__lede">
+          We&rsquo;ll be in touch closer to the time. Until then,
+          <span class="geordie" tabindex="0">gan canny<span class="geordie__gloss" role="tooltip">take care</span></span>.
+        </p>
+        <a class="btn btn--ghost" href="./"><span aria-hidden="true">&larr;</span> Back to the start</a>
+      </div>
+    </main>
+
+    <div class="scene" aria-hidden="true">
+      <svg class="skyline" data-skyline viewBox="0 0 1600 520" preserveAspectRatio="xMaxYMax slice"></svg>
+    </div>
+
+    <footer class="site-footer">Made in the Toon.</footer>
+  </div>
+</body>
+</html>
