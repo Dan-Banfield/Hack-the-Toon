@@ -6,6 +6,7 @@
 
   window.HTT.buildSkyline($("[data-skyline]"));
   window.HTT.buildStars($("[data-stars]"));
+  window.HTT.fitAboveSkyline($(".thanks"), $(".scene"));
 
   // Greet them by name if we have it.
   let name = "";

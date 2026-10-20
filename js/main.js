@@ -7,6 +7,7 @@
   const stars = $("[data-stars]");
   if (skyline) window.HTT.buildSkyline(skyline);
   if (stars) window.HTT.buildStars(stars);
+  window.HTT.fitAboveSkyline($(".interest"), $(".scene"));
 
   /* ---------------------------------------------------------------------
      Register your interest
@@ -31,6 +32,9 @@
     if (e.target.closest(".field.is-invalid")) setError(e.target, "");
   });
 
+  const submitLabel = $("[data-submit-label]", form);
+  const submitText = submitLabel.textContent;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -48,7 +52,7 @@
 
     const submit = $("[data-submit]", form);
     submit.disabled = true;
-    $("[data-submit-label]", form).textContent = "Sending…";
+    submitLabel.textContent = "Sending…";
 
     // Remember the first name so the thank-you page can greet them.
     try {
@@ -64,6 +68,6 @@
   // make sure the button is usable again.
   window.addEventListener("pageshow", () => {
     $("[data-submit]", form).disabled = false;
-    $("[data-submit-label]", form).textContent = "Keep me posted";
+    submitLabel.textContent = submitText;
   });
 })();

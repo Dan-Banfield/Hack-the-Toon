@@ -17,7 +17,7 @@ python3 -m http.server 8000
 index.html        Register your interest: name and email
 thanks.html       Animated thank-you page shown after signing up
 css/styles.css    Design tokens, layout and components for both pages
-js/scenes.js      SVG skyline (Tyne Bridge, St James' Park, cathedral, Grey's Monument, Castle Keep) and stars
+js/scenes.js      SVG skyline (Millennium Bridge, BALTIC, the Sage, St James' Park, cathedral, Grey's Monument, Castle Keep) and stars
 js/main.js        Form validation and redirect to the thank-you page
 js/thanks.js      Thank-you page: greeting, Metro display text, fireworks
 assets/           Favicon
@@ -30,10 +30,11 @@ assets/           Favicon
 
 ## Newcastle touches
 
-- Night-time skyline with the Tyne Bridge. On wide screens it's mirrored so the bridge sits under the headline rather than behind the form.
+- Night-time skyline with the Gateshead Millennium Bridge lit in its rainbow LEDs. The colours slowly cycle and reflect in the Tyne. On wide screens the skyline is mirrored so the bridge sits under the headline rather than behind the form.
+- The buildings are a mix of Tyneside terraces with chimney pots, Grainger Town fronts with cornices and domes, mansard roofs with dormers, stepped Quayside gables, saw-tooth warehouses and towers, plus BALTIC at the end of the bridge and the Sage behind.
 - Metro yellow, a dot-matrix display in the style of the Metro's passenger screens, and a platform-style station sign.
 - Geordie words (bait, gan canny) have a dotted underline. Hover over or tab to one to see its translation.
-- Headings use Zilla Slab, a nod to Margaret Calvert's slab-serif lettering for the Metro.
+- Set in Arvo, a geometric slab serif close to Margaret Calvert's lettering for the Metro. The dot-matrix displays use DotGothic16.
 
 ## History
 

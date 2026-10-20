@@ -1,10 +1,3 @@
-/* ==========================================================================
-   Hack the Toon
-   Palette: Tyne-at-night ink, Grainger Town sandstone, Tyne Bridge green,
-   and Metro yellow. Headings are set in a slab serif as a nod to Margaret
-   Calvert's lettering for the Tyne and Wear Metro.
-   ========================================================================== */
-
 :root {
   --night: #0d1420;
   --ink: #15191f;
@@ -17,8 +10,8 @@
   --metro-deep: #e0a800;
   --brick: #b0503a;
 
-  --font-display: "Zilla Slab", "Rockwell", "Roboto Slab", Georgia, serif;
-  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Arvo", "Rockwell", "Roboto Slab", Georgia, serif;
+  --font-body: "Arvo", "Rockwell", "Roboto Slab", Georgia, serif;
   --font-dot: "DotGothic16", ui-monospace, monospace;
 
   --gutter: clamp(16px, 4vw, 48px);
@@ -58,9 +51,6 @@ h1, h2 {
   border-radius: 4px;
 }
 
-/* --------------------------------------------------------------------------
-   Buttons
-   -------------------------------------------------------------------------- */
 .btn {
   --btn-bg: transparent;
   --btn-fg: currentColor;
@@ -98,9 +88,6 @@ h1, h2 {
 .btn--block { width: 100%; padding-block: 1.05em; font-size: 1.05rem; }
 .btn[disabled] { opacity: 0.75; cursor: progress; transform: none; }
 
-/* --------------------------------------------------------------------------
-   Dot-matrix display (Metro passenger information style)
-   -------------------------------------------------------------------------- */
 .dotmatrix {
   display: inline-flex;
   align-items: center;
@@ -130,7 +117,6 @@ h1, h2 {
 }
 @keyframes blink { 50% { opacity: 0.25; } }
 
-/* Geordie words: dotted underline, translation on hover / focus */
 .geordie {
   position: relative;
   text-decoration: underline dotted;
@@ -151,7 +137,7 @@ h1, h2 {
   border-radius: 8px;
   background: var(--paper);
   color: var(--ink);
-  font: 500 0.8rem/1.35 var(--font-body);
+  font: 400 0.8rem/1.35 var(--font-body);
   white-space: normal;
   text-align: left;
   opacity: 0;
@@ -163,9 +149,6 @@ h1, h2 {
 .geordie:hover .geordie__gloss,
 .geordie:focus .geordie__gloss { opacity: 1; transform: translate(-50%, 0); }
 
-/* --------------------------------------------------------------------------
-   Page shell: dusk sky, content, skyline along the bottom
-   -------------------------------------------------------------------------- */
 .page {
   position: relative;
   display: flex;
@@ -199,6 +182,7 @@ h1, h2 {
   z-index: 2;
   padding: 18px var(--gutter);
 }
+.site-header:not(:has(.brand__name, .brand__mark)) { display: none; }
 .brand {
   display: inline-flex;
   align-items: center;
@@ -208,16 +192,27 @@ h1, h2 {
 .brand__mark { width: 40px; height: auto; color: var(--bridge-lit); }
 .brand__name { font: 700 1.2rem/1 var(--font-display); }
 
+.page {
+  --scene-h: max(calc(100vw * 520 / 1600), min(220px, 60vw));
+  --scene-reserve: min(calc(var(--scene-h) * 0.5), 20vh);
+}
 .scene {
-  position: relative;
-  flex: none;
-  height: clamp(170px, 30vh, 340px);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  width: 100%;
+  aspect-ratio: 1600 / 520;
+  min-height: min(220px, 60vw);
   pointer-events: none;
 }
 .skyline { position: absolute; inset: 0; width: 100%; height: 100%; }
 .skyline .win { fill: #ffd27a; }
 .skyline .win--twinkle { animation: twinkle 5s ease-in-out infinite; }
 .skyline .shimmer { animation: shimmer 6s ease-in-out infinite; }
+.skyline .led-cycle { animation: led-cycle 16s linear infinite; }
+@keyframes led-cycle { to { filter: hue-rotate(360deg); } }
 @keyframes shimmer {
   0%, 100% { transform: translateX(0); opacity: 0.6; }
   50% { transform: translateX(14px); opacity: 0.25; }
@@ -231,9 +226,6 @@ h1, h2 {
   text-align: center;
 }
 
-/* --------------------------------------------------------------------------
-   Register your interest
-   -------------------------------------------------------------------------- */
 .interest {
   position: relative;
   z-index: 2;
@@ -243,16 +235,15 @@ h1, h2 {
   gap: clamp(32px, 6vw, 88px);
   align-items: center;
   width: min(1180px, 100%);
-  /* The top of the skyline is open sky, so let the content overlap it */
-  margin: 0 auto calc(-1 * clamp(60px, 12vh, 130px));
-  padding: clamp(16px, 4vh, 56px) var(--gutter) 0;
+  margin: 0 auto;
+  padding: clamp(24px, 5vh, 64px) var(--gutter) var(--scene-reserve);
 }
 
 .title { margin: 0.35em 0 0.3em; }
 .title__small {
   display: block;
   font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 600;
+  font-weight: 400;
   color: var(--stone);
 }
 .title__big {
@@ -271,7 +262,9 @@ h1, h2 {
   color: rgba(243, 236, 224, 0.86);
 }
 
-/* Intro and panel rise in on load */
+.interest__intro,
+.thanks__copy { text-shadow: 0 1px 14px rgba(10, 16, 27, 0.85), 0 0 3px rgba(10, 16, 27, 0.6); }
+
 .interest__intro > *,
 .panel {
   animation: rise 0.8s cubic-bezier(.2, .8, .2, 1) both;
@@ -293,7 +286,6 @@ h1, h2 {
 .panel__title { font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; }
 .panel__lede { margin: 0.5em 0 1.3em; color: var(--ink-soft); }
 
-/* Platform-style station sign */
 .station-sign {
   display: inline-flex;
   align-items: center;
@@ -303,7 +295,7 @@ h1, h2 {
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font: 600 0.9rem/1 var(--font-display);
+  font: 700 0.9rem/1 var(--font-display);
   letter-spacing: 0.04em;
 }
 .station-sign__bar {
@@ -342,14 +334,11 @@ h1, h2 {
   margin: 6px 0 0;
   color: var(--brick);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 .field__error:empty { display: none; }
 .form__small { margin: -4px 0 0; font-size: 0.85rem; color: var(--ink-soft); text-align: center; }
 
-/* --------------------------------------------------------------------------
-   Thank you: the train pulls in, doors open, fireworks over the Quayside
-   -------------------------------------------------------------------------- */
 .thanks {
   position: relative;
   z-index: 2;
@@ -361,7 +350,7 @@ h1, h2 {
   gap: clamp(24px, 5vh, 48px);
   width: min(960px, 100%);
   margin: 0 auto;
-  padding: clamp(16px, 4vh, 48px) var(--gutter) clamp(24px, 5vh, 56px);
+  padding: clamp(16px, 4vh, 48px) var(--gutter) var(--scene-reserve);
   text-align: center;
 }
 
@@ -374,7 +363,6 @@ h1, h2 {
   animation: rise 0.6s both;
 }
 .arrival__scene {
-  /* Never narrower than 600px, so the train stays a decent size on phones */
   width: max(100%, 600px);
   margin-inline: calc((100% - max(100%, 600px)) / 2);
   max-width: none;
@@ -430,7 +418,6 @@ h1, h2 {
   color: rgba(243, 236, 224, 0.86);
 }
 
-/* Fireworks: each burst is a ring of sparks that expands and fades */
 .burst {
   transform-box: fill-box;
   transform-origin: center;
@@ -444,17 +431,12 @@ h1, h2 {
   100% { opacity: 0; transform: scale(1) translateY(10px); }
 }
 
-/* --------------------------------------------------------------------------
-   Responsive
-   -------------------------------------------------------------------------- */
-/* On wide screens the form panel sits on the right, so mirror the skyline
-   to keep the Tyne Bridge in view under the headline. */
 @media (min-width: 881px) {
   .page--interest .skyline { transform: scaleX(-1); }
 }
 
 @media (max-width: 880px) {
-  .interest { grid-template-columns: 1fr; margin-bottom: calc(-1 * clamp(40px, 6vh, 80px)); }
+  .interest { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
