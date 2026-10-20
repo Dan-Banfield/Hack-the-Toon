@@ -15,7 +15,7 @@
 
   // The display switches over once the train has stopped (matches the CSS timings).
   const display = $("[data-display]");
-  setTimeout(() => { display.textContent = "Hack the Toon · You’ve registered your interest"; }, reduceMotion ? 0 : 2900);
+  setTimeout(() => { display.textContent = "You’ve registered your interest"; }, reduceMotion ? 0 : 2900);
 
   // Fireworks over the Quayside.
   const sky = $("[data-fireworks]");
