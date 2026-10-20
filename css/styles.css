@@ -15,17 +15,30 @@
   --font-dot: "DotGothic16", ui-monospace, monospace;
 
   --gutter: clamp(16px, 4vw, 48px);
+
+  /* The page is drawn edge to edge, under the phone's status bar, home
+     indicator and browser toolbars (viewport-fit=cover). These insets keep
+     the content itself clear of them. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
 
 *,
 *::before,
 *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+/* Whatever shows behind the system bars or when the page is pulled past its
+   ends should continue the page seamlessly: the night sky at the top, the
+   river at the bottom. */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: #0a101b;
+}
 
 body {
   margin: 0;
-  background: #080c14;
+  background: #0d1420;
   color: var(--paper);
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -180,9 +193,12 @@ h1, h2 {
 .site-header {
   position: relative;
   z-index: 2;
-  padding: 18px var(--gutter);
+  padding: calc(18px + var(--safe-top)) calc(var(--gutter) + var(--safe-right)) 18px calc(var(--gutter) + var(--safe-left));
 }
 .site-header:not(:has(.brand__name, .brand__mark)) { display: none; }
+/* A visible header already clears the status bar, so main needn't again */
+.site-header:has(.brand__name, .brand__mark) ~ .interest,
+.site-header:has(.brand__name, .brand__mark) ~ .thanks { --safe-top: 0px; }
 .brand {
   display: inline-flex;
   align-items: center;
@@ -236,7 +252,7 @@ h1, h2 {
   align-items: center;
   width: min(1180px, 100%);
   margin: 0 auto;
-  padding: clamp(24px, 5vh, 64px) var(--gutter) var(--scene-reserve);
+  padding: calc(clamp(24px, 5vh, 64px) + var(--safe-top)) calc(var(--gutter) + var(--safe-right)) var(--scene-reserve) calc(var(--gutter) + var(--safe-left));
 }
 
 .title { margin: 0.35em 0 0.3em; }
@@ -350,7 +366,7 @@ h1, h2 {
   gap: clamp(24px, 5vh, 48px);
   width: min(960px, 100%);
   margin: 0 auto;
-  padding: clamp(16px, 4vh, 48px) var(--gutter) var(--scene-reserve);
+  padding: calc(clamp(16px, 4vh, 48px) + var(--safe-top)) calc(var(--gutter) + var(--safe-right)) var(--scene-reserve) calc(var(--gutter) + var(--safe-left));
   text-align: center;
 }
 
