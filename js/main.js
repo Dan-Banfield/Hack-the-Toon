@@ -67,7 +67,7 @@
     }
 
     submit.disabled = true;
-    submitLabel.textContent = "Sending…";
+    submitLabel.textContent = "Submitting...";
 
     const name = form.elements.name.value.trim();
     let error = null;
@@ -94,21 +94,17 @@
       formError.textContent = error;
       submit.disabled = false;
       submitLabel.textContent = submitText;
-      // Each Turnstile token can only be used once, so get a fresh one.
       if (window.turnstile) window.turnstile.reset();
       return;
     }
 
-    // Remember the first name so the thank-you page can greet them.
     try {
       sessionStorage.setItem("htt:name", name.split(/\s+/)[0]);
-    } catch (_) { /* storage unavailable: the thank-you page falls back to a generic greeting */ }
+    } catch (_) { }
 
     window.location.href = "thanks.html";
   });
 
-  // Coming back via the browser's back button restores the page from cache;
-  // make sure the button is usable again.
   window.addEventListener("pageshow", () => {
     submit.disabled = false;
     submitLabel.textContent = submitText;
