@@ -1,0 +1,7 @@
+# Copy to .dev.vars for local development with `npx wrangler dev`
+# .dev.vars is git-ignored: never commit real keys.
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_xxxxxxxxxxxxxxxx
+# Cloudflare's test secret: always passes (pairs with the test sitekey in index.html)
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+# SUPABASE_TABLE=interest

@@ -35,8 +35,22 @@
   const submitLabel = $("[data-submit-label]", form);
   const submitText = submitLabel.textContent;
 
-  form.addEventListener("submit", (e) => {
+  const formError = $("[data-form-error]", form);
+  const submit = $("[data-submit]", form);
+
+  // Messages for the errors /api/register can return.
+  const failures = {
+    invalid: "Please check your name and email.",
+    captcha: "We couldn’t confirm you’re not a robot. Please try again.",
+    default: "Something went wrong on our side. Please try again in a moment.",
+    offline: "We couldn’t reach the server. Check your connection and try again.",
+  };
+
+  form.addEventListener("input", () => { formError.textContent = ""; });
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    formError.textContent = "";
 
     let firstInvalid = null;
     Object.entries(rules).forEach(([name, check]) => {
@@ -50,24 +64,59 @@
       return;
     }
 
-    const submit = $("[data-submit]", form);
+    // Turnstile puts its token in a hidden field once it has checked the
+    // visitor, usually within a second or two of the page loading.
+    const token = form.elements["cf-turnstile-response"]?.value || "";
+    if (!token) {
+      formError.textContent = "Just a moment, we’re checking you’re not a robot. Please try again in a second.";
+      return;
+    }
+
     submit.disabled = true;
     submitLabel.textContent = "Sending…";
 
+    const name = form.elements.name.value.trim();
+    let error = null;
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email: form.elements.email.value.trim(),
+          website: form.elements.website.value,
+          turnstileToken: token,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        error = failures[data.error] || failures.default;
+      }
+    } catch (_) {
+      error = failures.offline;
+    }
+
+    if (error) {
+      formError.textContent = error;
+      submit.disabled = false;
+      submitLabel.textContent = submitText;
+      // Each Turnstile token can only be used once, so get a fresh one.
+      if (window.turnstile) window.turnstile.reset();
+      return;
+    }
+
     // Remember the first name so the thank-you page can greet them.
     try {
-      sessionStorage.setItem("htt:name", form.elements.name.value.trim().split(/\s+/)[0]);
+      sessionStorage.setItem("htt:name", name.split(/\s+/)[0]);
     } catch (_) { /* storage unavailable: the thank-you page falls back to a generic greeting */ }
 
-    // TODO: send the name and email to the backend once it exists, e.g.
-    //   await fetch("/api/interest", { method: "POST", body: new FormData(form) });
-    setTimeout(() => { window.location.href = "thanks.html"; }, 450);
+    window.location.href = "thanks.html";
   });
 
   // Coming back via the browser's back button restores the page from cache;
   // make sure the button is usable again.
   window.addEventListener("pageshow", () => {
-    $("[data-submit]", form).disabled = false;
+    submit.disabled = false;
     submitLabel.textContent = submitText;
   });
 })();

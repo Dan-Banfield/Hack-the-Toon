@@ -4,3 +4,7 @@ node_modules/
 .vscode/
 .idea/
 *.log
+
+# Local secrets and build output for wrangler dev
+.dev.vars
+.wrangler/

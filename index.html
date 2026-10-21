@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/scenes.js" defer></script>
   <script src="js/main.js" defer></script>
+  <!-- Cloudflare Turnstile: an invisible check that a real person sent the form -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body>
@@ -66,6 +68,16 @@
             <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
             <p class="field__error" aria-live="polite"></p>
           </div>
+          <!-- Honeypot: hidden from people, but bots tend to fill it in -->
+          <div class="form__hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <!-- TODO: replace this sitekey with the real one from the Cloudflare
+               dashboard (Turnstile). 1x00000000000000000000AA is Cloudflare's
+               public test key, which always passes. -->
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAFebThGywJJSq26S" data-appearance="interaction-only" data-theme="light" data-size="flexible"></div>
+          <p class="form__error" data-form-error role="alert"></p>
           <button class="btn btn--metro btn--block" type="submit" data-submit>
             <span data-submit-label>Submit</span> <span aria-hidden="true">&rarr;</span>
           </button>

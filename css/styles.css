@@ -356,6 +356,23 @@ h1, h2 {
   font-weight: 400;
 }
 .field__error:empty { display: none; }
+/* Honeypot: kept off-screen rather than display:none, which some bots skip */
+.form__hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.form__error {
+  margin: 0;
+  color: var(--brick);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.form__error:empty { display: none; }
+/* Turnstile only shows itself if it needs the visitor to click something */
+.cf-turnstile:empty { display: none; }
 .form__small { margin: -4px 0 0; font-size: 0.85rem; color: var(--ink-soft); text-align: center; }
 
 .thanks {

@@ -1,0 +1,12 @@
+# Files in the repo that must not be served as part of the website
+.git
+.gitignore
+.assetsignore
+.dev.vars
+.dev.vars.example
+.wrangler
+node_modules
+src
+supabase
+README.md
+wrangler.jsonc
