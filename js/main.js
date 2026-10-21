@@ -3,9 +3,6 @@
 
   const $ = (sel, root = document) => root.querySelector(sel);
 
-  /* ---------------------------------------------------------------------
-     Register your interest
-     --------------------------------------------------------------------- */
   const form = $("[data-form]");
   if (!form) return;
 
@@ -21,7 +18,6 @@
     input.setAttribute("aria-invalid", msg ? "true" : "false");
   }
 
-  // Clear an error as soon as the field is edited.
   form.addEventListener("input", (e) => {
     if (e.target.closest(".field.is-invalid")) setError(e.target, "");
   });
@@ -32,7 +28,6 @@
   const formError = $("[data-form-error]", form);
   const submit = $("[data-submit]", form);
 
-  // Messages for the errors /api/register can return.
   const failures = {
     invalid: "Please check your name and email.",
     captcha: "We couldn’t confirm you’re not a robot. Please try again.",
@@ -58,8 +53,6 @@
       return;
     }
 
-    // Turnstile puts its token in a hidden field once it has checked the
-    // visitor, usually within a second or two of the page loading.
     const token = form.elements["cf-turnstile-response"]?.value || "";
     if (!token) {
       formError.textContent = "Just a moment, we’re checking you’re not a robot. Please try again in a second.";
