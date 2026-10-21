@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-GB" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <!--
+    Hack the Toon: "We've received your interest" email, for Brevo.
+
+    Paste into Brevo → Transactional → Templates → New template → "Paste your code".
+    Subject suggestion: Whey aye! We've got your interest in Hack the Toon
+
+    Variables (Brevo template language), matching the Supabase `interest` table:
+      params.name        the name as entered on the form (the `name` column)
+      params.first_name  optional: just the first word of it, as the website's
+                         thank-you page uses ("Whey aye, Dan!")
+      params.email       the address it was sent to (the `email` column)
+    If neither name is passed, the greeting falls back to "Whey aye!".
+    If the recipient is a Brevo contact instead, contact.FIRSTNAME is used.
+
+    Images load from https://hackthetoon.com/assets/email/, so they only
+    appear once the site (with that folder) is deployed.
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!-- The design is a daytime sky: ask clients not to invert it in dark mode -->
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
+  <title>We've received your interest in Hack the Toon</title>
+  <!--[if mso]>
+  <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+  <style>td, th, div, p, a, h1, span { font-family: Georgia, serif !important; }</style>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light only; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+    a { color: #2a44a6; }
+    @media (max-width: 620px) {
+      .container { width: 100% !important; }
+      .gutter { padding-left: 16px !important; padding-right: 16px !important; }
+      .card-pad { padding: 28px 24px 24px !important; }
+      .title-big { font-size: 56px !important; }
+      .fluid { width: 100% !important; height: auto !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#2569b8;" bgcolor="#2569b8">
+
+  <!-- Preview text shown next to the subject line in the inbox -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#2569b8; opacity:0;">
+    Thanks for registering your interest. We'll be in touch closer to the time. Until then, gan canny.
+    &#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;
+  </div>
+
+  <!-- The sky deepens towards the top where clients support gradients, and is
+       plain #2569b8 elsewhere. The lower half stays exactly #2569b8 because the
+       Tyne Bridge image is flattened onto that colour. -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#2569b8" style="background-color:#2569b8; background-image:linear-gradient(#133d88, #1b55a8 25%, #2569b8 45%, #2569b8);">
+    <tr>
+      <td align="center" style="padding:0;">
+
+        <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+
+          <!-- The Metro's passenger display -->
+          <tr>
+            <td align="center" class="gutter" style="padding:40px 40px 18px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="#07080c" style="background-color:#07080c; border-radius:6px; padding:9px 16px; font-family:'DotGothic16', 'Courier New', Courier, monospace; font-size:13px; line-height:16px; letter-spacing:1.5px; text-transform:uppercase; color:#ffc72c;">
+                    You&rsquo;ve registered your interest
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- The Metrocar, in white pencil -->
+          <tr>
+            <td align="center" class="gutter" style="padding:0 40px;">
+              <img src="https://hackthetoon.com/assets/email/metrocar.png" width="520" height="87" alt="" class="fluid" style="display:block; width:520px; max-width:100%; height:auto;">
+            </td>
+          </tr>
+          <tr>
+            <td class="gutter" style="padding:6px 40px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td height="2" style="height:2px; line-height:2px; font-size:2px; background-color:#cfe0f2; opacity:0.7;">&nbsp;</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Hack the Toon! -->
+          <tr>
+            <td align="center" class="gutter" style="padding:30px 40px 0; font-family:'Arvo', Rockwell, 'Roboto Slab', Georgia, serif; text-align:center;">
+              <div style="font-size:26px; line-height:30px; font-style:italic; color:#ffc45c;">Hack the</div>
+              <div class="title-big" style="font-size:72px; line-height:72px; font-weight:700; letter-spacing:-1.5px; color:#f6eedf;">Toon<span style="color:#ffc72c;">!</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:10px 0 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr><td width="200" height="6" bgcolor="#ffc72c" style="width:200px; height:6px; line-height:6px; font-size:6px; background-color:#ffc72c; border-radius:3px;">&nbsp;</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- The magpie, perched on the note, against the sun -->
+          <tr>
+            <td align="right" class="gutter" style="padding:18px 48px 0 40px; line-height:0; font-size:0;">
+              <img src="https://hackthetoon.com/assets/email/magpie-sun.png" width="204" height="138" alt="" style="display:inline-block; width:204px; height:138px;">
+            </td>
+          </tr>
+
+          <!-- The note -->
+          <tr>
+            <td class="gutter" style="padding:0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fbf6ea" style="background-color:#fbf6ea; border-radius:6px; border-left:3px solid #e6a5a5;">
+                <tr>
+                  <td class="card-pad" style="padding:36px 40px 28px; font-family:'Arvo', Rockwell, 'Roboto Slab', Georgia, serif; color:#1c1a2b;">
+                    <p style="margin:0 0 6px; font-size:22px; line-height:28px; font-weight:700; color:#2a44a6;">
+                      {% if params.first_name %}Whey aye, {{ params.first_name }}!{% else %}{% if params.name %}Whey aye, {{ params.name }}!{% else %}{% if contact.FIRSTNAME %}Whey aye, {{ contact.FIRSTNAME }}!{% else %}Whey aye!{% endif %}{% endif %}{% endif %}
+                    </p>
+                    <h1 style="margin:0 0 18px; font-size:34px; line-height:38px; font-weight:700; color:#1c1a2b;">We&rsquo;ve received your interest.</h1>
+                    <p style="margin:0 0 14px; font-size:16px; line-height:26px; color:#565266;">
+                      Thanks for signing up for Hack the Toon, Newcastle University&rsquo;s student hackathon: 24&nbsp;hours of hacking, and free bait (that&rsquo;s food) in the Toon. Every skill level is welcome.
+                    </p>
+                    <p style="margin:0 0 14px; font-size:16px; line-height:26px; color:#565266;">
+                      Tickets aren&rsquo;t out yet, and concrete details are still in the works. You&rsquo;re on the list, so you&rsquo;ll be the first to know what&rsquo;s happening.
+                    </p>
+                    <p style="margin:0; font-size:16px; line-height:26px; color:#565266;">
+                      We&rsquo;ll be in touch closer to the time. Until then, gan canny (take care).
+                    </p>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                      <tr>
+                        <td valign="bottom" style="font-family:'Arvo', Rockwell, 'Roboto Slab', Georgia, serif; font-size:16px; line-height:24px; font-style:italic; color:#2a44a6; padding-bottom:10px;">
+                          The Hack the Toon team
+                        </td>
+                        <td align="right" valign="bottom" width="110" style="width:110px;">
+                          <img src="https://hackthetoon.com/assets/email/seal.png" width="104" height="104" alt="" style="display:block; width:104px; height:104px;">
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- The Tyne Bridge -->
+          <tr>
+            <td align="center" class="gutter" style="padding:34px 40px 26px;">
+              <img src="https://hackthetoon.com/assets/email/tyne-bridge.jpg" width="520" height="376" alt="A watercolour of the Tyne Bridge, with the High Level and Swing bridges behind it" class="fluid" style="display:block; width:520px; max-width:100%; height:auto; font-family:Georgia, serif; font-size:14px; color:#f6eedf;">
+            </td>
+          </tr>
+
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+
+      </td>
+    </tr>
+
+    <!-- The river, with the small print -->
+    <tr>
+      <td align="center" bgcolor="#22548c" style="background-color:#22548c; border-top:2px solid #6d9fb8; padding:0;">
+        <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+          <tr>
+            <td align="center" class="gutter" style="padding:26px 40px 36px; font-family:'Arvo', Rockwell, 'Roboto Slab', Georgia, serif; font-size:13px; line-height:21px; color:#dbe7f4; text-align:center;">
+              <p style="margin:0 0 10px;">
+                You&rsquo;re getting this because {% if params.email %}{{ params.email }}{% else %}this address{% endif %} was used to register interest at
+                <a href="https://hackthetoon.com" style="color:#ffc72c; text-decoration:underline;">hackthetoon.com</a>.
+                If that wasn&rsquo;t you, you can safely ignore this email.
+              </p>
+              <p style="margin:0; color:#b9cde3;">Hack the Toon &middot; Newcastle upon Tyne</p>
+            </td>
+          </tr>
+        </table>
+        <!--[if mso]></td></tr></table><![endif]-->
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

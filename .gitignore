@@ -8,3 +8,6 @@ node_modules/
 # Local secrets and build output for wrangler dev
 .dev.vars
 .wrangler/
+
+# Local previews of the email templates (python3 email/preview.py)
+email/*.preview.html

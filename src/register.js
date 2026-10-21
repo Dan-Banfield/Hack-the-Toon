@@ -1,3 +1,5 @@
+import { welcome } from "./brevo.js";
+
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME = 100;
 const MAX_EMAIL = 254;
@@ -8,7 +10,7 @@ const json = (body, status = 200) =>
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 
-export async function handleRegister(request, env) {
+export async function handleRegister(request, env, ctx) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY || !env.TURNSTILE_SECRET_KEY) {
     console.error("register: missing secrets");
     return json({ error: "not_configured" }, 500);
@@ -72,10 +74,17 @@ export async function handleRegister(request, env) {
     body: JSON.stringify({ name, email }),
   });
 
-  if (res.ok) return json({ ok: true });
+  if (res.ok) {
+    // A new sign-up: send the confirmation email and add them to the Brevo
+    // list. waitUntil lets that finish after the visitor has their reply, so
+    // the form never waits on Brevo (and a Brevo outage can't break it).
+    ctx.waitUntil(welcome(env, { name, email }));
+    return json({ ok: true });
+  }
 
   // A duplicate email breaks the table's unique index (Postgres code 23505).
   // Treat it as success, so the form never reveals who has already signed up.
+  // No second email is sent, so the form can't be used to spam an address.
   const detail = await res.json().catch(() => ({}));
   if (res.status === 409 || detail.code === "23505") return json({ ok: true });
 

@@ -18,3 +18,7 @@ assets/Images
 # SVG sources of the large watercolour textures; the site serves the WebP
 # renders of them in assets/texture (see the README)
 assets/texture/src
+
+# Email templates (pasted into Brevo, not part of the website). Their images
+# in assets/email are served by the site, so they stay deployed.
+email

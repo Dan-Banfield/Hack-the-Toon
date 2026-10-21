@@ -9,14 +9,14 @@
 import { handleRegister } from "./register.js";
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
 
     if (pathname === "/api/register") {
       if (request.method !== "POST") {
         return new Response("Method not allowed", { status: 405, headers: { Allow: "POST" } });
       }
-      return handleRegister(request, env);
+      return handleRegister(request, env, ctx);
     }
 
     return env.ASSETS.fetch(request);
