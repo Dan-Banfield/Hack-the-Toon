@@ -1,19 +1,13 @@
 // Cloudflare Workers config for hackthetoon.com.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Must match the Worker's name in the Cloudflare dashboard, or deploying
-  // creates a second, separate Worker.
   "name": "hack-the-toon",
   "main": "src/worker.js",
   "compatibility_date": "2026-01-01",
-  // The static site is served from the repo root. Files that shouldn't be
-  // public (the Worker code, SQL, docs, local secrets) are listed in
-  // .assetsignore.
   "assets": {
     "directory": "./",
     "binding": "ASSETS"
   },
-  // Keep variables set in the dashboard when deploying
   "keep_vars": true,
   "observability": { "enabled": true }
 }
