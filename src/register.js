@@ -1,25 +1,3 @@
-/*
- * The sign-up handler for POST /api/register (called from src/worker.js).
- *
- * It runs on Cloudflare's servers as part of the site's Worker, never in the
- * visitor's browser. It is the only thing allowed to write to the Supabase
- * table; the database itself is closed to the public.
- *
- * For each sign-up it:
- *   1. quietly drops anything that filled in the hidden honeypot field,
- *   2. validates the name and email,
- *   3. checks the Cloudflare Turnstile token (proves a real browser sent it),
- *   4. inserts the row into Supabase using the secret key.
- *
- * Settings (Cloudflare dashboard → Workers & Pages → the Worker → Settings →
- * Variables and Secrets; for local development, a .dev.vars file):
- *   SUPABASE_URL          e.g. https://abcd1234.supabase.co
- *   SUPABASE_SECRET_KEY   the project's secret key (sb_secret_…) or legacy
- *                         service_role key. Add it as a Secret.
- *   TURNSTILE_SECRET_KEY  from the Turnstile widget. A Secret too.
- *   SUPABASE_TABLE        optional, defaults to "interest"
- */
-
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME = 100;
 const MAX_EMAIL = 254;
@@ -32,7 +10,7 @@ const json = (body, status = 200) =>
 
 export async function handleRegister(request, env) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY || !env.TURNSTILE_SECRET_KEY) {
-    console.error("register: missing SUPABASE_URL, SUPABASE_SECRET_KEY or TURNSTILE_SECRET_KEY");
+    console.error("register: missing secrets");
     return json({ error: "not_configured" }, 500);
   }
 
@@ -48,15 +26,12 @@ export async function handleRegister(request, env) {
   const honeypot = String(body.website ?? "");
   const token = String(body.turnstileToken ?? "");
 
-  // People never see the honeypot field, so anything in it came from a bot.
-  // Pretend it worked so the bot has no reason to try again.
   if (honeypot) return json({ ok: true });
 
   if (!name || name.length > MAX_NAME || email.length > MAX_EMAIL || !EMAIL.test(email)) {
     return json({ error: "invalid" }, 400);
   }
 
-  // Ask Turnstile whether the token is genuine and unused.
   if (!token) return json({ error: "captcha" }, 403);
   const check = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
@@ -80,8 +55,18 @@ export async function handleRegister(request, env) {
   };
   if (key.startsWith("eyJ")) headers.Authorization = `Bearer ${key}`;
 
-  const table = env.SUPABASE_TABLE || "interest";
-  const res = await fetch(`${env.SUPABASE_URL.replace(/\/+$/, "")}/rest/v1/${encodeURIComponent(table)}`, {
+  // Accept SUPABASE_URL with or without a path (Supabase's settings show it
+  // as ".../rest/v1/"): only the https://<project>.supabase.co part is used.
+  let origin;
+  try {
+    origin = new URL(env.SUPABASE_URL.trim()).origin;
+  } catch {
+    console.error("register: SUPABASE_URL is not a valid URL");
+    return json({ error: "not_configured" }, 500);
+  }
+  // Tables live in the public schema, so a "public." prefix isn't needed.
+  const table = (env.SUPABASE_TABLE).trim().replace(/^public\./, "");
+  const res = await fetch(`${origin}/rest/v1/${encodeURIComponent(table)}`, {
     method: "POST",
     headers,
     body: JSON.stringify({ name, email }),
@@ -94,6 +79,6 @@ export async function handleRegister(request, env) {
   const detail = await res.json().catch(() => ({}));
   if (res.status === 409 || detail.code === "23505") return json({ ok: true });
 
-  console.error("register: Supabase insert failed", res.status, detail);
+  console.error("register: Supabase insert failed", res.status);
   return json({ error: "server" }, 502);
 }
