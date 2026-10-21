@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hack the Toon · Register your interest</title>
   <meta name="description" content="Hack the Toon is a 24hr student hackathon in Newcastle. Register your interest and we'll be in touch.">
-  <meta name="theme-color" content="#0a101b">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f4ecdf">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/favicon-48.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" as="image" href="assets/img/tyne-bridge.webp" imagesrcset="assets/img/tyne-bridge-900.webp 900w, assets/img/tyne-bridge.webp 1600w" imagesizes="(max-width: 880px) min(100vw, 560px), 520px">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
-  <script src="js/scenes.js" defer></script>
   <script src="js/main.js" defer></script>
   <!-- Cloudflare Turnstile: an invisible check that a real person sent the form -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -21,8 +23,6 @@
 
 <body>
   <div class="page page--interest">
-    <svg class="page__stars" data-stars viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
-
     <header class="site-header">
       <a class="brand" href="./index.html">
         <!--svg class="brand__mark" viewBox="0 0 48 32" aria-hidden="true">
@@ -52,7 +52,10 @@
         </p>
       </div>
 
+      <img class="interest__art" src="assets/img/tyne-bridge.webp" srcset="assets/img/tyne-bridge-900.webp 900w, assets/img/tyne-bridge.webp 1600w" sizes="(max-width: 880px) min(100vw, 560px), 520px" width="1600" height="1156" alt="A watercolour of the Tyne Bridge, with the High Level and Swing bridges behind it">
+
       <section class="panel" aria-labelledby="interest-title">
+        <img class="panel__magpie" src="assets/img/magpie.webp" width="268" height="420" alt="">
         <!--div class="station-sign" aria-hidden="true"><span class="station-sign__bar"></span>The next station is... Hack the Toon</div!-->
         <h2 class="panel__title" id="interest-title">Register your interest</h2>
         <p class="panel__lede">Tickets aren&rsquo;t out yet, and concrete details are still in the works. Leave your name and email here and you&rsquo;ll be the first to know what's happening.</p>
@@ -86,9 +89,9 @@
       </section>
     </main>
 
-    <div class="scene" aria-hidden="true">
-      <svg class="skyline" data-skyline viewBox="0 0 1600 520" preserveAspectRatio="xMaxYMax slice"></svg>
-    </div>
+    <!-- Grey's Monument is painted as a corner piece: its straight edges sit
+         flush with the right and bottom of the page -->
+    <img class="corner corner--right" src="assets/img/monument.webp" width="534" height="1000" alt="" aria-hidden="true">
   </div>
 </body>
 </html>

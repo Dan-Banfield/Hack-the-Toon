@@ -3,12 +3,6 @@
 
   const $ = (sel, root = document) => root.querySelector(sel);
 
-  const skyline = $("[data-skyline]");
-  const stars = $("[data-stars]");
-  if (skyline) window.HTT.buildSkyline(skyline);
-  if (stars) window.HTT.buildStars(stars);
-  window.HTT.fitAboveSkyline($(".interest"), $(".scene"));
-
   /* ---------------------------------------------------------------------
      Register your interest
      --------------------------------------------------------------------- */

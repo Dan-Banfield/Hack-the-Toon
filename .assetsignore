@@ -10,3 +10,7 @@ src
 supabase
 README.md
 wrangler.jsonc
+
+# Full-size originals of the commissioned paintings; the site serves the
+# optimised copies in assets/img
+assets/Images

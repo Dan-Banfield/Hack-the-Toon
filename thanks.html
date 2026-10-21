@@ -5,21 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hack the Toon · Thank you</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0a101b">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f4ecdf">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/favicon-48.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
-  <script src="js/scenes.js" defer></script>
   <script src="js/thanks.js" defer></script>
 </head>
 <body>
   <div class="page page--thanks">
-    <svg class="page__stars" data-stars viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
-    <svg class="page__fireworks" data-fireworks viewBox="0 0 1600 600" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
 
     <header class="site-header">
       <a class="brand" href="./index.html">
@@ -40,57 +39,33 @@
           <span data-display>Now arriving: Hack the Toon</span>
         </p>
 
-        <svg class="arrival__scene" viewBox="0 0 900 170">
-          <g class="arrival__sign">
-            <rect x="404" y="8" width="5" height="40" fill="#2b3346"/>
-            <rect x="491" y="8" width="5" height="40" fill="#2b3346"/>
-            <rect x="330" y="0" width="240" height="34" rx="17" fill="#f3ece0"/>
-            <circle cx="350" cy="17" r="9" fill="#f3ece0" stroke="#ffc72c" stroke-width="5"/>
-            <text x="462" y="23" text-anchor="middle" font-family="Arvo, Rockwell, Georgia, serif" font-weight="700" font-size="17" fill="#15191f">Hack the Toon</text>
-          </g>
-
-          <path class="arrival__rail" d="M-2000 158 H2900" stroke="#3a4357" stroke-width="3"/>
-          <path class="arrival__sleepers" d="M-2000 163 H2900" stroke="#2a3142" stroke-width="5" stroke-dasharray="4 14"/>
-
-          <g class="arrival__train">
-            <g transform="translate(258 62) scale(3.2)">
-              <path d="M8 6 H56 V25 H5 Q2 25 2 22 V13 Q2 6 8 6 Z" fill="#e9e6df"/>
-              <path d="M64 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H64 Z" fill="#e9e6df"/>
-              <path d="M56 8 H64 V23 H56 Z" fill="#222"/>
-              <path d="M2 13 Q2 6 8 6 H12 V25 H5 Q2 25 2 22 Z" fill="#ffc72c"/>
-              <path d="M108 6 H112 Q118 6 118 13 V22 Q118 25 115 25 H108 Z" fill="#ffc72c"/>
-              <rect x="5" y="9.5" width="102" height="5" rx="1" fill="#1b1f27"/>
-              <path d="M3.5 9.5 H9 V15 H3 Z M111 9.5 H116.5 L117 15 H111 Z" fill="#1b1f27"/>
-              <g class="arrival__doors">
-                <g><rect x="22" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="22" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="25" y="8" width="3" height="17" fill="#ffc72c"/></g>
-                <g><rect x="40" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="40" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="43" y="8" width="3" height="17" fill="#ffc72c"/></g>
-                <g><rect x="74" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="74" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="77" y="8" width="3" height="17" fill="#ffc72c"/></g>
-                <g><rect x="92" y="8" width="6" height="17" fill="#2a2418"/><rect class="door-l" x="92" y="8" width="3" height="17" fill="#ffc72c"/><rect class="door-r" x="95" y="8" width="3" height="17" fill="#ffc72c"/></g>
-              </g>
-              <rect x="2" y="19" width="116" height="1.5" fill="#1b1f27" opacity=".55"/>
-              <circle class="arrival__headlight" cx="116.5" cy="20.5" r="1.2" fill="#fff7d6"/>
-              <circle cx="16" cy="27" r="2.6" fill="#1b1f27"/><circle cx="50" cy="27" r="2.6" fill="#1b1f27"/>
-              <circle cx="70" cy="27" r="2.6" fill="#1b1f27"/><circle cx="104" cy="27" r="2.6" fill="#1b1f27"/>
-            </g>
-          </g>
-
-          <rect x="-2000" y="166" width="4900" height="4" fill="#ffc72c" opacity=".9"/>
-        </svg>
+        <div class="arrival__track">
+          <img class="arrival__train" src="assets/img/metrocar.webp" width="1800" height="300" alt="">
+          <!-- Two pencil rails, a little wobbly, as if sketched by hand -->
+          <svg class="arrival__rails" viewBox="0 0 3000 14" preserveAspectRatio="none">
+            <path d="M0 4 C500 3 1000 5.5 1500 4 S2500 3 3000 4.5" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+            <path d="M0 10.5 C600 11.5 1100 9.5 1500 10.5 S2400 11.5 3000 10" stroke-width="1.2" vector-effect="non-scaling-stroke" opacity=".6"/>
+          </svg>
+        </div>
       </div>
 
-      <div class="thanks__copy">
-        <p class="thanks__kicker" data-greeting>Whey aye!</p>
-        <h1 class="thanks__title">Thank you for your interest.</h1>
-        <p class="thanks__lede">
-          We&rsquo;ll be in touch closer to the time. Until then,
-          <span class="geordie" tabindex="0">gan canny<span class="geordie__gloss" role="tooltip">take care</span></span>.
-        </p>
+      <div class="note">
+        <div class="note__card thanks__copy">
+          <p class="thanks__kicker" data-greeting>Whey aye!</p>
+          <h1 class="thanks__title">Thank you for your interest.</h1>
+          <p class="thanks__lede">
+            We&rsquo;ll be in touch closer to the time. Until then,
+            <span class="geordie" tabindex="0">gan canny<span class="geordie__gloss" role="tooltip">take care</span></span>.
+          </p>
+          <img class="note__seal" src="assets/img/letter-stamp.webp" width="520" height="522" alt="" aria-hidden="true">
+        </div>
       </div>
     </main>
 
-    <div class="scene" aria-hidden="true">
-      <svg class="skyline" data-skyline viewBox="0 0 1600 520" preserveAspectRatio="xMaxYMax slice"></svg>
-    </div>
+    <!-- The university arches are painted as a corner piece (straight left and
+         bottom edges); the Angel stands on its own hill -->
+    <img class="corner corner--left" src="assets/img/campus-arches.webp" width="866" height="1100" alt="" aria-hidden="true">
+    <img class="corner corner--angel" src="assets/img/angel-of-the-north.webp" width="800" height="597" alt="" aria-hidden="true">
   </div>
 </body>
 </html>

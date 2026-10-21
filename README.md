@@ -23,10 +23,11 @@ npx wrangler dev
 index.html        Register your interest: name and email
 thanks.html       Animated thank-you page shown after signing up
 css/styles.css    Design tokens, layout and components for both pages
-js/scenes.js      SVG skyline (Millennium Bridge, BALTIC, the Sage, St James' Park, cathedral, Grey's Monument, Castle Keep) and stars
 js/main.js        Form validation, sending the sign-up to /api/register, redirect to the thank-you page
-js/thanks.js      Thank-you page: greeting, Metro display text, fireworks
-assets/           Favicon
+js/thanks.js      Thank-you page: greeting and Metro display text
+assets/img/       Web-sized WebP copies of the commissioned paintings (what the site serves)
+assets/Images/    Full-size original PNGs (kept for reference, not deployed; see .assetsignore)
+assets/favicon*   Favicons and Apple touch icon, made from the wax seal
 src/worker.js               The site's Cloudflare Worker: serves the static files and routes /api/register
 src/register.js             Checks and stores sign-ups (runs on Cloudflare, not in the browser)
 wrangler.jsonc              Worker config (name, entry point, static files)
@@ -38,7 +39,7 @@ supabase/interest.sql       Database table and security settings
 ## How it behaves
 
 - **Register your interest.** Name and email, validated in the browser, then sent to `/api/register`. Only once the server confirms does the browser go to `thanks.html`. Otherwise a message under the form explains what went wrong. A duplicate email is shown the normal thank-you page, so the form never reveals who has already signed up.
-- **Thank you.** A Metro train pulls into a "Hack the Toon" station and the doors open. The dot-matrix display switches to "You're on the list", the page greets the visitor by first name ("Whey aye, Alex!"), and fireworks go off over the Quayside. With reduced motion turned on, the page shows the final state straight away.
+- **Thank you.** Pencil rails sketch themselves across the page and the pencil Metrocar pulls in. The dot-matrix display switches to "You've registered your interest", and a note card rises with the visitor's first name ("Whey aye, Alex!"). Then the wax seal is stamped onto the card. With reduced motion turned on, the page shows the final state straight away.
 
 ## Sign-ups: how they're stored securely
 
@@ -61,11 +62,23 @@ Browser ──POST /api/register──▶ Worker (Cloudflare) ──secret key�
 5. **Deploy**: pushing to Git deploys as before. In the Worker's Settings → Build, the deploy command should be `npx wrangler deploy`, which reads `wrangler.jsonc`.
 6. **Test on the live site**: a sign-up appears in the Supabase table, the same email again still says thanks without adding a second row, and the dashboard's function logs show no errors.
 
+## Artwork
+
+All the illustrations are commissioned paintings, on a warm sketchbook-paper background:
+
+- **Register your interest:** the Tyne Bridge (with the High Level and Swing bridges behind) under the headline, Grey's Monument in the bottom-right corner, and a magpie perched on the form.
+- **Thank you:** the pencil Metrocar, the university arches in the bottom-left corner, the Angel of the North bottom-right, and the wax seal stamped onto the note.
+- The Monument and the arches are painted to run off their canvas, so they sit flush against the page corners, and the CSS fades their other cut edge into the paper.
+
+To add or update a painting, put the original in `assets/Images/` and export a web copy into `assets/img/`. For example, with ImageMagick:
+
+```sh
+magick assets/Images/tyne-bridge.png -trim +repage -resize 1600x -quality 80 assets/img/tyne-bridge.webp
+```
+
 ## Newcastle touches
 
-- Night-time skyline with the Gateshead Millennium Bridge lit in its rainbow LEDs. The colours slowly cycle and reflect in the Tyne. On wide screens the skyline is mirrored so the bridge sits under the headline rather than behind the form.
-- The buildings are a mix of Tyneside terraces with chimney pots, Grainger Town fronts with cornices and domes, mansard roofs with dormers, stepped Quayside gables, saw-tooth warehouses and towers, plus BALTIC at the end of the bridge and the Sage behind.
-- Metro yellow, a dot-matrix display in the style of the Metro's passenger screens, and a platform-style station sign.
+- Metro yellow buttons, and a dot-matrix display in the style of the Metro's passenger screens.
 - Geordie words (bait, gan canny) have a dotted underline. Hover over or tab to one to see its translation.
 - Set in Arvo, a geometric slab serif close to Margaret Calvert's lettering for the Metro. The dot-matrix displays use DotGothic16.
 

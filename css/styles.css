@@ -1,11 +1,10 @@
 :root {
-  --night: #0d1420;
-  --ink: #15191f;
-  --ink-soft: #4d525a;
-  --paper: #f3ece0;
-  --stone: #d6c3a2;
+  --paper: #f4ecdf;
+  --card: #fffaf2;
+  --ink: #1f1b16;
+  --ink-soft: #5b544b;
+  --sepia: #8a6544;
 
-  --bridge-lit: #4f9e7f;
   --metro: #ffc72c;
   --metro-deep: #e0a800;
   --brick: #b0503a;
@@ -21,20 +20,17 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-/* The colour at the very top of the sky and the very bottom of the river.
-   Browsers paint this behind the page wherever it doesn't reach: Safari on
-   iOS fills its status bar and toolbar strips with the page's background
-   colour, and it also shows when the page is pulled past either end. Using
-   the same colour for both edges of the artwork makes those strips read as
-   more sky and more river. */
+/* Browsers paint this behind the page wherever it doesn't reach: Safari on
+   iOS fills its status bar and toolbar strips with it, and it shows when the
+   page is pulled past either end. Matching the paper keeps those seamless. */
 html,
-body { background: #0a101b; }
+body { background: var(--paper); }
 
 html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  color: var(--paper);
+  color: var(--ink);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.6;
@@ -54,7 +50,7 @@ h1, h2 {
 }
 
 :focus-visible {
-  outline: 3px solid var(--metro);
+  outline: 3px solid var(--metro-deep);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -88,14 +84,15 @@ h1, h2 {
 .btn--metro:active { box-shadow: 0 2px 0 var(--metro-deep); }
 
 .btn--ghost {
-  border-color: rgba(243, 236, 224, 0.4);
-  color: var(--paper);
+  border-color: rgba(31, 27, 22, 0.3);
+  color: var(--ink);
 }
-.btn--ghost:hover { border-color: var(--paper); }
+.btn--ghost:hover { border-color: var(--ink); }
 
 .btn--block { width: 100%; padding-block: 1.05em; font-size: 1.05rem; }
 .btn[disabled] { opacity: 0.75; cursor: progress; transform: none; }
 
+/* Metro passenger-information style display */
 .dotmatrix {
   display: inline-flex;
   align-items: center;
@@ -143,8 +140,8 @@ h1, h2 {
   max-width: 220px;
   padding: 0.5em 0.75em;
   border-radius: 8px;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   font: 400 0.8rem/1.35 var(--font-body);
   white-space: normal;
   text-align: left;
@@ -153,10 +150,13 @@ h1, h2 {
   transform: translate(-50%, 4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.geordie__gloss::before { content: "Geordie: "; color: var(--brick); font-weight: 700; }
+.geordie__gloss::before { content: "Geordie: "; color: var(--metro); font-weight: 700; }
 .geordie:hover .geordie__gloss,
 .geordie:focus .geordie__gloss { opacity: 1; transform: translate(-50%, 0); }
 
+/* --------------------------------------------------------------------------
+   Page: sketchbook paper, content, then a band of paintings along the bottom
+   -------------------------------------------------------------------------- */
 .page {
   position: relative;
   display: flex;
@@ -164,28 +164,12 @@ h1, h2 {
   min-height: 100vh;
   min-height: 100svh;
   overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    #0a101b 0%,
-    #121d33 34%,
-    #2c2c4c 58%,
-    #6c4560 76%,
-    #c46f58 90%,
-    #e79a63 100%
-  );
+  /* A faint paper grain, plus a little warmth towards the top */
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.55), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    var(--paper);
 }
-.page__stars,
-.page__fireworks {
-  position: absolute;
-  inset: 0 0 auto 0;
-  width: 100%;
-  height: 65%;
-  pointer-events: none;
-}
-/* Animated as whole layers (not per star or per window) so the browser can
-   composite them rather than repainting on every frame. */
-.page__stars--twinkle { animation: twinkle 4s ease-in-out infinite; will-change: opacity; }
-@keyframes twinkle { 50% { opacity: 0.25; } }
 
 .site-header {
   position: relative;
@@ -199,63 +183,78 @@ h1, h2 {
   gap: 10px;
   text-decoration: none;
 }
-.brand__mark { width: 40px; height: auto; color: var(--bridge-lit); }
+.brand__mark { width: 40px; height: auto; }
 .brand__name { font: 700 1.2rem/1 var(--font-display); }
 
-.page {
-  --scene-h: max(calc(100vw * 520 / 1600), min(220px, 60vw));
-  --scene-reserve: min(calc(var(--scene-h) * 0.5), 20vh);
-}
-.scene {
+/* Corner pieces: paintings with straight edges, placed flush against the
+   page's bottom corners and kept behind the content */
+.corner {
   position: absolute;
-  left: 0;
-  right: 0;
   bottom: 0;
   z-index: 0;
-  width: 100%;
-  aspect-ratio: 1600 / 520;
-  min-height: min(220px, 60vw);
+  width: auto;
+  max-width: none;
   pointer-events: none;
+  user-select: none;
+  animation: develop 1.4s 0.3s ease-out both;
 }
-/* The skyline is a stack of SVG layers (built in js/scenes.js): the static
-   artwork, then layers for the moving parts, each animated as a whole. */
-.skyline { position: absolute; inset: 0; width: 100%; height: 100%; }
-.skyline--lights-a,
-.skyline--lights-b { animation: twinkle 5s ease-in-out infinite; will-change: opacity; }
-.skyline--lights-b { animation-delay: -2.5s; }
-.skyline--shimmer-a,
-.skyline--shimmer-b { animation: shimmer 6s ease-in-out infinite; will-change: transform, opacity; }
-.skyline--shimmer-b { animation-delay: -3s; }
-/* The Millennium Bridge's LEDs slowly cycle through the rainbow */
-.skyline--bridge { animation: led-cycle 16s linear infinite; will-change: filter; }
-@keyframes led-cycle { to { filter: hue-rotate(360deg); } }
-@keyframes shimmer {
-  0%, 100% { transform: translateX(0); opacity: 1; }
-  50% { transform: translateX(14px); opacity: 0.4; }
+/* Both paintings run off the edge of their canvas on one more side than the
+   corner they sit in, so that edge is faded into the paper */
+.corner--right {
+  right: 0;
+  height: clamp(240px, 46vh, 520px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%);
+  mask-image: linear-gradient(to bottom, transparent, #000 22%);
+}
+.corner--left {
+  left: 0;
+  height: clamp(220px, 44vh, 500px);
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 18%);
+  mask-image: linear-gradient(to left, transparent, #000 18%);
+}
+.corner--angel {
+  right: clamp(8px, 3vw, 48px);
+  bottom: clamp(4px, 2vh, 20px);
+  height: clamp(110px, 20vh, 220px);
+}
+/* Paintings fade up out of the paper, like watercolour soaking in */
+@keyframes develop {
+  from { opacity: 0; transform: translateY(14px); filter: saturate(0.2) blur(2px); }
 }
 
-.site-footer {
-  padding: 14px var(--gutter) 18px;
-  background: #0d1420;
-  color: rgba(243, 236, 224, 0.5);
-  font-size: 0.85rem;
-  text-align: center;
-}
-
+/* --------------------------------------------------------------------------
+   Register your interest
+   -------------------------------------------------------------------------- */
 .interest {
   position: relative;
   z-index: 2;
   flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 6vw, 88px);
-  align-items: center;
-  /* Rows keep their natural height and centre as a block (fitAboveSkyline
-     in js/scenes.js measures them) */
+  grid-template-areas:
+    "intro panel"
+    "art   panel";
+  column-gap: clamp(32px, 6vw, 88px);
+  row-gap: clamp(8px, 2vh, 20px);
   align-content: center;
   width: min(1180px, 100%);
   margin: 0 auto;
-  padding: clamp(24px, 5vh, 64px) var(--gutter) var(--scene-reserve);
+  padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(16px, 3vh, 32px);
+}
+.interest__intro { grid-area: intro; align-self: end; }
+.panel { grid-area: panel; align-self: center; }
+
+/* The Tyne Bridge, under the headline */
+.interest__art {
+  grid-area: art;
+  align-self: start;
+  width: auto;
+  height: clamp(170px, 34vh, 380px);
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left top;
+  margin-left: -2%;
+  animation: develop 1.4s 0.3s ease-out both;
 }
 
 .title { margin: 0.35em 0 0.3em; }
@@ -263,7 +262,7 @@ h1, h2 {
   display: block;
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 400;
-  color: var(--stone);
+  color: var(--sepia);
 }
 .title__big {
   display: block;
@@ -272,17 +271,14 @@ h1, h2 {
   line-height: 0.82;
   letter-spacing: -0.03em;
 }
-.title__stop { color: var(--metro); }
+.title__stop { color: var(--metro-deep); }
 
 .interest__lede {
   max-width: 32em;
   margin: 0;
   font-size: clamp(1.05rem, 1.5vw, 1.2rem);
-  color: rgba(243, 236, 224, 0.86);
+  color: var(--ink-soft);
 }
-
-.interest__intro,
-.thanks__copy { text-shadow: 0 1px 14px rgba(10, 16, 27, 0.85), 0 0 3px rgba(10, 16, 27, 0.6); }
 
 .interest__intro > *,
 .panel {
@@ -296,14 +292,33 @@ h1, h2 {
 }
 
 .panel {
+  position: relative;
   padding: clamp(24px, 3vw, 34px);
+  border: 1px solid rgba(31, 27, 22, 0.08);
   border-radius: 22px;
-  background: var(--paper);
+  background: var(--card);
   color: var(--ink);
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 2px 0 rgba(31, 27, 22, 0.04), 0 28px 60px -30px rgba(70, 45, 20, 0.45);
 }
 .panel__title { font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; }
 .panel__lede { margin: 0.5em 0 1.3em; color: var(--ink-soft); }
+
+/* A magpie perched on the top edge of the form */
+.panel__magpie {
+  position: absolute;
+  right: clamp(20px, 3vw, 36px);
+  bottom: calc(100% - 9px);
+  height: clamp(84px, 11vw, 118px);
+  width: auto;
+  pointer-events: none;
+  animation: hop 0.7s 0.9s cubic-bezier(.3, .7, .4, 1.4) both;
+  transform-origin: 50% 100%;
+}
+@keyframes hop {
+  0% { opacity: 0; transform: translate(40px, -30px) rotate(8deg); }
+  60% { opacity: 1; }
+  100% { transform: none; }
+}
 
 .station-sign {
   display: inline-flex;
@@ -335,9 +350,9 @@ h1, h2 {
 .field input {
   width: 100%;
   padding: 12px 14px;
-  border: 2px solid rgba(21, 25, 31, 0.22);
+  border: 2px solid rgba(31, 27, 22, 0.2);
   border-radius: 10px;
-  background: #fffdf9;
+  background: #fff;
   color: var(--ink);
   font: inherit;
   font-size: 1rem;
@@ -375,6 +390,9 @@ h1, h2 {
 .cf-turnstile:empty { display: none; }
 .form__small { margin: -4px 0 0; font-size: 0.85rem; color: var(--ink-soft); text-align: center; }
 
+/* --------------------------------------------------------------------------
+   Thank you: the pencil Metrocar pulls in, then the note is sealed
+   -------------------------------------------------------------------------- */
 .thanks {
   position: relative;
   z-index: 2;
@@ -383,96 +401,146 @@ h1, h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(24px, 5vh, 48px);
-  width: min(960px, 100%);
+  gap: clamp(20px, 4vh, 40px);
+  width: min(1060px, 100%);
   margin: 0 auto;
-  padding: clamp(16px, 4vh, 48px) var(--gutter) var(--scene-reserve);
+  padding: clamp(24px, 5vh, 56px) var(--gutter);
   text-align: center;
 }
 
-.arrival { width: 100%; }
+.arrival {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 .arrival__display {
   min-width: 18em;
-  justify-content: flex-start;
-  margin-bottom: clamp(16px, 3vh, 28px);
+  justify-content: center;
+  margin-bottom: clamp(14px, 2.5vh, 24px);
   font-size: 0.9rem;
   animation: rise 0.6s both;
 }
-.arrival__scene {
-  width: max(100%, 600px);
-  margin-inline: calc((100% - max(100%, 600px)) / 2);
-  max-width: none;
-  height: auto;
-  overflow: visible;
+.arrival__track {
+  position: relative;
+  width: min(880px, 100%);
 }
-
-.arrival__sign { animation: rise 0.6s 0.2s both; }
-.arrival__rail {
-  stroke-dasharray: 4900;
-  animation: draw 1.2s 0.1s ease-out both;
-}
-.arrival__sleepers { animation: fade 1s 0.3s both; }
-@keyframes draw { from { stroke-dashoffset: 4900; } }
-@keyframes fade { from { opacity: 0; } }
-
 .arrival__train {
-  animation: pull-in 2.6s 0.3s cubic-bezier(.1, .65, .2, 1) both;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  animation: pull-in 2.6s 0.3s cubic-bezier(.12, .7, .25, 1.02) both;
 }
 @keyframes pull-in {
-  from { transform: translateX(-1100px); }
+  from { transform: translateX(-130vw); }
   to { transform: translateX(0); }
 }
-.arrival__headlight { animation: glow 1.2s ease-in-out infinite alternate; }
-@keyframes glow { to { opacity: 0.4; } }
+/* Pencil rails, drawn in as the train approaches */
+.arrival__rails {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 300vw;
+  height: 14px;
+  transform: translateX(-50%);
+  max-width: none;
+  overflow: visible;
+}
+.arrival__rails path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-dasharray: 6000;
+  animation: draw 1.4s 0.1s ease-out both;
+}
+@keyframes draw { from { stroke-dashoffset: 6000; } }
 
-.door-l,
-.door-r { animation: 0.5s 3s ease-in-out both; }
-.door-l { animation-name: door-l; }
-.door-r { animation-name: door-r; }
-@keyframes door-l { to { transform: translateX(-2.6px); } }
-@keyframes door-r { to { transform: translateX(2.6px); } }
+/* The message, on a note card */
+.note {
+  width: min(620px, 100%);
+  text-align: left;
+}
+.note__card {
+  position: relative;
+  padding: clamp(24px, 4vw, 44px);
+  border: 1px solid rgba(31, 27, 22, 0.08);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(transparent 0 31px, rgba(59, 111, 158, 0.12) 31px 32px) 0 18px / 100% 100% no-repeat,
+    var(--card);
+  box-shadow: 0 2px 0 rgba(31, 27, 22, 0.04), 0 28px 60px -30px rgba(70, 45, 20, 0.5);
+  transform: rotate(-1.2deg);
+  animation: card-in 0.8s 2.9s cubic-bezier(.2, .8, .2, 1) both, thud 0.35s 3.95s ease-out;
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(24px) rotate(1deg); }
+}
+/* The card gives a little as the seal is pressed into it */
+@keyframes thud {
+  40% { transform: rotate(-1.2deg) translateY(3px) scale(0.995); }
+}
 
-.thanks__copy > * { animation: rise 0.8s cubic-bezier(.2, .8, .2, 1) both; }
-.thanks__copy > :nth-child(1) { animation-delay: 3.1s; }
-.thanks__copy > :nth-child(2) { animation-delay: 3.25s; }
-.thanks__copy > :nth-child(3) { animation-delay: 3.4s; }
-.thanks__copy > :nth-child(4) { animation-delay: 3.6s; }
+.note__seal {
+  position: absolute;
+  right: clamp(-28px, -2vw, -12px);
+  bottom: clamp(-34px, -3vw, -18px);
+  width: clamp(92px, 12vw, 132px);
+  height: auto;
+  transform: rotate(-12deg);
+  filter: drop-shadow(0 6px 6px rgba(60, 35, 15, 0.3));
+  animation: stamp 0.6s 3.6s cubic-bezier(.5, 0, .75, 0) both;
+}
+@keyframes stamp {
+  0% { opacity: 0; transform: translateY(-40px) scale(2.2) rotate(-30deg); filter: drop-shadow(0 30px 18px rgba(60, 35, 15, 0.15)); }
+  30% { opacity: 1; }
+  80% { transform: scale(0.94) rotate(-12deg); }
+  100% { transform: scale(1) rotate(-12deg); }
+}
 
 .thanks__kicker {
   margin: 0 0 0.3em;
-  color: var(--metro);
-  font: 700 clamp(1.3rem, 2.6vw, 1.7rem)/1.2 var(--font-display);
+  color: var(--brick);
+  font: 700 clamp(1.2rem, 2.4vw, 1.6rem)/1.2 var(--font-display);
 }
 .thanks__title {
-  font-size: clamp(2.6rem, 7vw, 5rem);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
   font-weight: 700;
 }
 .thanks__lede {
   max-width: 30em;
-  margin: 0.8em auto 1.8em;
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  color: rgba(243, 236, 224, 0.86);
+  margin: 0.8em 0 0;
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  color: var(--ink-soft);
 }
 
-.burst {
-  transform-box: fill-box;
-  transform-origin: center;
-  opacity: 0;
-  animation: burst 1.8s cubic-bezier(.15, .7, .3, 1) 3;
-}
-@keyframes burst {
-  0% { opacity: 0; transform: scale(0.1); }
-  8% { opacity: 1; }
-  70% { opacity: 0.9; }
-  100% { opacity: 0; transform: scale(1) translateY(10px); }
-}
-
-@media (min-width: 881px) {
-  .page--interest .scene { transform: scaleX(-1); }
-}
-
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
 @media (max-width: 880px) {
-  .interest { grid-template-columns: 1fr; }
+  /* Stacked: headline, form, then the Tyne Bridge to finish the page */
+  .interest {
+    grid-template-columns: 1fr;
+    grid-template-areas: "intro" "panel" "art";
+    row-gap: clamp(28px, 5vh, 48px);
+  }
+  .interest__art {
+    justify-self: center;
+    width: min(100%, 560px);
+    height: auto;
+    margin: 0;
+  }
+  .corner--right { display: none; }
+  /* Room at the bottom of the thank-you page for the corner paintings */
+  .thanks { padding-bottom: clamp(150px, 26vh, 240px); }
+  .corner--left { height: clamp(170px, 26vh, 260px); }
+  .corner--angel { height: clamp(80px, 13vh, 130px); }
+}
+
+@media (max-width: 640px) {
+  /* Room under the message for the seal, so it never covers the text */
+  .note__card { padding-bottom: 76px; }
+  .note__seal { right: 10px; bottom: -22px; width: 96px; }
 }
 
 @media (max-width: 520px) {
@@ -489,5 +557,4 @@ h1, h2 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .burst { display: none; }
 }
