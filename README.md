@@ -25,6 +25,7 @@ thanks.html       Animated thank-you page shown after signing up
 css/styles.css    Design tokens, layout and components for both pages
 js/main.js        Form validation, sending the sign-up to /api/register, redirect to the thank-you page
 js/thanks.js      Thank-you page: greeting and Metro display text
+js/geordie.js     Both pages: closes a Geordie translation when you tap elsewhere (phones don't by themselves)
 assets/img/       Web-sized WebP copies of the commissioned paintings (what the site serves)
 assets/Images/    Full-size original PNGs (kept for reference, not deployed; see .assetsignore)
 assets/texture/   The watercolour the page is painted with: paper grain, clouds, sun, river, brush stroke

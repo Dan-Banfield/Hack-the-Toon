@@ -35,6 +35,14 @@
   --font-dot: "DotGothic16", ui-monospace, monospace;
 
   --gutter: clamp(16px, 4vw, 48px);
+
+  /* The page is painted edge to edge, behind the phone's status bar, home
+     indicator and browser toolbars (viewport-fit=cover), so the sky carries
+     on behind them. These insets keep the content itself clear of them. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 *,
@@ -178,9 +186,10 @@ h1, h2 {
   max-width: 220px;
   padding: 0.5em 0.75em;
   border-radius: 8px;
-  background: var(--cream);
-  color: var(--ink);
-  box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.7);
+  /* Dark like the dot-matrix display, so the label can share its Metro yellow */
+  background: #0b1020;
+  color: var(--cream);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 10px 24px -10px rgb(0 0 0 / 0.7);
   font: 400 0.8rem/1.35 var(--font-body);
   white-space: normal;
   text-align: left;
@@ -189,13 +198,14 @@ h1, h2 {
   transform: translate(-50%, 4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.geordie__gloss::before { content: "Geordie: "; color: var(--brick); font-weight: 700; }
-.geordie:hover .geordie__gloss,
+.geordie__gloss::before { content: "Geordie: "; color: var(--metro); font-weight: 700; }
+/* Touch screens keep :hover after a tap, so there the gloss follows focus
+   alone, which js/geordie.js clears when you tap anywhere else */
 .geordie:focus .geordie__gloss { opacity: 1; transform: translate(-50%, 0); }
-/* On paper, the gloss is dark instead */
+@media (hover: hover) {
+  .geordie:hover .geordie__gloss { opacity: 1; transform: translate(-50%, 0); }
+}
 .note .geordie { text-decoration-color: var(--metro-deep); }
-.note .geordie__gloss { background: var(--ink); color: var(--cream); }
-.note .geordie__gloss::before { color: var(--metro); }
 
 /* --------------------------------------------------------------------------
    Page: the wash
@@ -207,8 +217,10 @@ h1, h2 {
   isolation: isolate;
   display: flex;
   flex-direction: column;
+  /* The large viewport, so the sky reaches the bottom edge of the screen
+     even when the browser's toolbars have slid away */
   min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100lvh;
   overflow: hidden;
   /* From the top: the grain of the paper, the Tyne glinting in the sun, the
      blooms and drifts of the wash, then the sky itself, laid in wet-in-wet
@@ -353,7 +365,11 @@ h1, h2 {
   align-content: center;
   width: min(1180px, 100%);
   margin: 0 auto;
-  padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(16px, 3vh, 32px);
+  padding:
+    calc(clamp(56px, 8vh, 96px) + var(--safe-top))
+    calc(var(--gutter) + var(--safe-right))
+    calc(clamp(16px, 3vh, 32px) + var(--safe-bottom))
+    calc(var(--gutter) + var(--safe-left));
 }
 /* Above the panel, so the sun behind the magpie can never cover the words */
 .interest__intro { grid-area: intro; align-self: end; position: relative; z-index: 1; }
@@ -591,7 +607,11 @@ h1, h2 {
   gap: clamp(20px, 4vh, 40px);
   width: min(1060px, 100%);
   margin: 0 auto;
-  padding: clamp(24px, 5vh, 56px) var(--gutter);
+  padding:
+    calc(clamp(24px, 5vh, 56px) + var(--safe-top))
+    calc(var(--gutter) + var(--safe-right))
+    calc(clamp(24px, 5vh, 56px) + var(--safe-bottom))
+    calc(var(--gutter) + var(--safe-left));
   text-align: center;
 }
 
@@ -768,7 +788,7 @@ h1, h2 {
     --floodlight: radial-gradient(ellipse 90vw 46vh at 50% 100%, rgb(var(--sun) / 0.2), transparent 72%);
   }
   /* Room at the bottom of the thank-you page for the corner paintings */
-  .thanks { padding-bottom: clamp(150px, 26vh, 240px); }
+  .thanks { padding-bottom: calc(clamp(150px, 26vh, 240px) + var(--safe-bottom)); }
   .page--thanks { --arches-h: clamp(170px, 26vh, 260px); }
   .corner--angel { height: clamp(80px, 13vh, 130px); }
 }
