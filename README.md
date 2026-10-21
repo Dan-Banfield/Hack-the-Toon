@@ -27,6 +27,8 @@ js/main.js        Form validation, sending the sign-up to /api/register, redirec
 js/thanks.js      Thank-you page: greeting and Metro display text
 assets/img/       Web-sized WebP copies of the commissioned paintings (what the site serves)
 assets/Images/    Full-size original PNGs (kept for reference, not deployed; see .assetsignore)
+assets/texture/   The watercolour the page is painted with: paper grain, spatter, moon, brush stroke
+assets/texture/src/  SVG sources of the three large textures, which the site serves as WebP (not deployed)
 assets/favicon*   Favicons and Apple touch icon, made from the wax seal
 src/worker.js               The site's Cloudflare Worker: serves the static files and routes /api/register
 src/register.js             Checks and stores sign-ups (runs on Cloudflare, not in the browser)
@@ -39,7 +41,7 @@ supabase/interest.sql       Database table and security settings
 ## How it behaves
 
 - **Register your interest.** Name and email, validated in the browser, then sent to `/api/register`. Only once the server confirms does the browser go to `thanks.html`. Otherwise a message under the form explains what went wrong. A duplicate email is shown the normal thank-you page, so the form never reveals who has already signed up.
-- **Thank you.** Pencil rails sketch themselves across the page and the pencil Metrocar pulls in. The dot-matrix display switches to "You've registered your interest", and a note card rises with the visitor's first name ("Whey aye, Alex!"). Then the wax seal is stamped onto the card. With reduced motion turned on, the page shows the final state straight away.
+- **Thank you.** Rails sketch themselves across the night sky and the Metrocar pulls in, drawn in white pencil. The dot-matrix display switches to "You've registered your interest", and a page torn from a notebook rises with the visitor's first name ("Whey aye, Alex!"). Then the wax seal is stamped onto it. With reduced motion turned on, the page shows the final state straight away.
 
 ## Sign-ups: how they're stored securely
 
@@ -62,13 +64,31 @@ Browser ──POST /api/register──▶ Worker (Cloudflare) ──secret key�
 5. **Deploy**: pushing to Git deploys as before. In the Worker's Settings → Build, the deploy command should be `npx wrangler deploy`, which reads `wrangler.jsonc`.
 6. **Test on the live site**: a sign-up appears in the Supabase table, the same email again still says thanks without adding a second row, and the dashboard's function logs show no errors.
 
+## Design: blue hour on the Tyne
+
+The page is painted in the same medium as the commissions. Both pages are one watercolour of the Tyne at dusk: a French ultramarine sky spattered with white gouache for stars, warming through violet and rose to the last light on the horizon, with the river at the foot of the page catching the sunset. The words sit on sheets of watercolour paper, and Metro yellow is kept for the things you press.
+
+- **Palette** (the custom properties at the top of `css/styles.css`): ultramarine and indigo for the sky, sodium-lamp amber for light, cream paper, ultramarine fountain-pen ink and Metro yellow. `--night` is the colour at the very top and bottom of the page. It matches `theme-color` in both HTML files, so phones colour their system bars to match the sky.
+- **Texture** (`assets/texture/`): the wash is layered with blend modes. Drifts of pigment, blooms with hard dried edges, the grain of cold-pressed paper and ultramarine's granulation all sit over a CSS gradient for the sky.
+- **Small textures are SVG filters** (paper, granulation, spatter, moon, brush stroke, and the torn edge of the form, which is inline in the CSS because a mask file that fails to load hides the whole sheet), drawn by the browser at any size. The three page-sized ones (blooms, drift, river) would be slow to draw that way on phones, so the site serves WebP renders of them. Their sources are in `assets/texture/src/`. After editing one, re-render it with headless Chrome and convert it with ImageMagick, for example:
+
+  ```sh
+  printf '<style>body{margin:0}img{width:1600px;height:1000px}</style><img src="blooms.svg">' > assets/texture/src/render.html
+  chrome --headless=new --default-background-color=00000000 --window-size=1600,1000 \
+    --screenshot=/tmp/blooms.png "file://$PWD/assets/texture/src/render.html"
+  magick /tmp/blooms.png -quality 70 -define webp:alpha-quality=60 assets/texture/blooms.webp
+  rm assets/texture/src/render.html
+  ```
+
+  Render `drift` at 640×400 and `river` at 800×100. Both are stretched to fit the page.
+
 ## Artwork
 
-All the illustrations are commissioned paintings, on a warm sketchbook-paper background:
+All the illustrations are commissioned paintings:
 
-- **Register your interest:** the Tyne Bridge (with the High Level and Swing bridges behind) under the headline, Grey's Monument in the bottom-right corner, and a magpie perched on the form.
-- **Thank you:** the pencil Metrocar, the university arches in the bottom-left corner, the Angel of the North bottom-right, and the wax seal stamped onto the note.
-- The Monument and the arches are painted to run off their canvas, so they sit flush against the page corners, and the CSS fades their other cut edge into the paper.
+- **Register your interest:** the Tyne Bridge (with the High Level and Swing bridges behind) under the headline, Grey's Monument in the bottom-right corner, and a magpie perched on the form, standing against a rising moon.
+- **Thank you:** the Metrocar (the pencil drawing, inverted into white pencil for the night), the university arches in the bottom-left corner, the Angel of the North bottom-right, and the wax seal stamped onto the note.
+- The Monument and the arches are painted to run off their canvas, so they sit flush against the page corners, and the CSS fades their other cut edge into the sky. A haze of light sits behind the arches so the pencil sketch above them stays visible at dusk.
 
 To add or update a painting, put the original in `assets/Images/` and export a web copy into `assets/img/`. For example, with ImageMagick:
 
@@ -78,6 +98,7 @@ magick assets/Images/tyne-bridge.png -trim +repage -resize 1600x -quality 80 ass
 
 ## Newcastle touches
 
+- The whole page is the Tyne at blue hour, with the river along the bottom.
 - Metro yellow buttons, and a dot-matrix display in the style of the Metro's passenger screens.
 - Geordie words (bait, gan canny) have a dotted underline. Hover over or tab to one to see its translation.
 - Set in Arvo, a geometric slab serif close to Margaret Calvert's lettering for the Metro. The dot-matrix displays use DotGothic16.

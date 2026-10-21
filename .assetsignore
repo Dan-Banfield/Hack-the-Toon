@@ -14,3 +14,7 @@ wrangler.jsonc
 # Full-size originals of the commissioned paintings; the site serves the
 # optimised copies in assets/img
 assets/Images
+
+# SVG sources of the large watercolour textures; the site serves the WebP
+# renders of them in assets/texture (see the README)
+assets/texture/src

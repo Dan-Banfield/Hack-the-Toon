@@ -1,9 +1,30 @@
+/* ==========================================================================
+   Hack the Toon: "Blue hour on the Tyne"
+
+   The page is painted in the same medium as the commissions: one watercolour
+   of the Tyne at dusk. A French ultramarine sky, spattered with white gouache
+   for stars, warms through violet and rose to the last light on the horizon,
+   and the river at the foot of the page catches the sunset. A moon rises
+   behind the magpie, the words sit on sheets of watercolour paper, and Metro
+   yellow is kept for the things you press.
+   ========================================================================== */
+
 :root {
-  --paper: #f4ecdf;
-  --card: #fffaf2;
-  --ink: #1f1b16;
-  --ink-soft: #5b544b;
-  --sepia: #8a6544;
+  /* The wash */
+  --night: #080c26;        /* the very top and bottom of the page, and the browser bars */
+  --indigo: #10184e;
+  --ultramarine: #1d3593;
+
+  /* Light, as RGB channels so it can be used at any strength: rgb(var(--lamp) / 0.4) */
+  --lamp: 255 176 92;      /* sodium floodlight on sandstone */
+
+  /* Paper and ink */
+  --cream: #f6eedf;
+  --mist: #dcdff2;         /* body copy on the wash: cream, cooled by the blue */
+  --card: #fbf6ea;
+  --ink: #1c1a2b;
+  --ink-soft: #565266;
+  --pen: #2a44a6;          /* ultramarine fountain-pen ink */
 
   --metro: #ffc72c;
   --metro-deep: #e0a800;
@@ -22,15 +43,21 @@
 
 /* Browsers paint this behind the page wherever it doesn't reach: Safari on
    iOS fills its status bar and toolbar strips with it, and it shows when the
-   page is pulled past either end. Matching the paper keeps those seamless. */
+   page is pulled past either end. The wash starts and ends on this colour, so
+   those strips read as more sky. Keep it in step with theme-color. */
 html,
-body { background: var(--paper); }
+body { background: var(--night); }
 
-html { -webkit-text-size-adjust: 100%; }
+/* Dark scrollbars on the night; the form controls on paper stay light */
+html { -webkit-text-size-adjust: 100%; color-scheme: dark; }
+.panel,
+.note { color-scheme: light; }
+
+::selection { background: var(--metro); color: var(--ink); }
 
 body {
   margin: 0;
-  color: var(--ink);
+  color: var(--cream);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.6;
@@ -50,10 +77,13 @@ h1, h2 {
 }
 
 :focus-visible {
-  outline: 3px solid var(--metro-deep);
+  outline: 3px solid var(--metro);
   outline-offset: 3px;
   border-radius: 4px;
 }
+/* Yellow would vanish against the paper */
+.panel :focus-visible,
+.note :focus-visible { outline-color: var(--pen); }
 
 .btn {
   --btn-bg: transparent;
@@ -82,12 +112,15 @@ h1, h2 {
 }
 .btn--metro:hover { box-shadow: 0 6px 0 var(--metro-deep); }
 .btn--metro:active { box-shadow: 0 2px 0 var(--metro-deep); }
+/* The arrow leans towards the next stop */
+.btn--metro [aria-hidden="true"] { display: inline-block; transition: transform 0.15s ease; }
+.btn--metro:hover [aria-hidden="true"] { transform: translateX(3px); }
 
 .btn--ghost {
-  border-color: rgba(31, 27, 22, 0.3);
-  color: var(--ink);
+  border-color: rgb(246 238 223 / 0.35);
+  color: var(--cream);
 }
-.btn--ghost:hover { border-color: var(--ink); }
+.btn--ghost:hover { border-color: var(--cream); }
 
 .btn--block { width: 100%; padding-block: 1.05em; font-size: 1.05rem; }
 .btn[disabled] { opacity: 0.75; cursor: progress; transform: none; }
@@ -101,14 +134,19 @@ h1, h2 {
   padding: 0.45em 0.9em;
   border-radius: 6px;
   background:
-    radial-gradient(circle, rgba(255, 199, 44, 0.07) 1px, transparent 1.4px) 0 0 / 4px 4px,
-    #08090b;
+    radial-gradient(circle, rgb(255 199 44 / 0.07) 1px, transparent 1.4px) 0 0 / 4px 4px,
+    #07080c;
+  /* The unit's housing, so it holds its own against the night */
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 10px 24px -10px rgb(0 0 0 / 0.8);
   color: var(--metro);
   font-family: var(--font-dot);
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  text-shadow: 0 0 6px rgba(255, 199, 44, 0.55);
+  text-shadow: 0 0 6px rgb(255 199 44 / 0.55);
   white-space: nowrap;
 }
 .dotmatrix__dot {
@@ -127,7 +165,7 @@ h1, h2 {
   text-decoration: underline dotted;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
-  text-decoration-color: var(--metro-deep);
+  text-decoration-color: var(--metro);
   cursor: help;
   white-space: nowrap;
 }
@@ -140,8 +178,9 @@ h1, h2 {
   max-width: 220px;
   padding: 0.5em 0.75em;
   border-radius: 8px;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.7);
   font: 400 0.8rem/1.35 var(--font-body);
   white-space: normal;
   text-align: left;
@@ -150,25 +189,92 @@ h1, h2 {
   transform: translate(-50%, 4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
-.geordie__gloss::before { content: "Geordie: "; color: var(--metro); font-weight: 700; }
+.geordie__gloss::before { content: "Geordie: "; color: var(--brick); font-weight: 700; }
 .geordie:hover .geordie__gloss,
 .geordie:focus .geordie__gloss { opacity: 1; transform: translate(-50%, 0); }
+/* On paper, the gloss is the night instead */
+.note .geordie { text-decoration-color: var(--metro-deep); }
+.note .geordie__gloss { background: var(--ink); color: var(--cream); }
+.note .geordie__gloss::before { color: var(--metro); }
 
 /* --------------------------------------------------------------------------
-   Page: sketchbook paper, content, then a band of paintings along the bottom
+   Page: the wash
    -------------------------------------------------------------------------- */
 .page {
+  /* Each page floodlights its own landmarks (see the end of this section) */
+  --floodlight: linear-gradient(transparent, transparent);
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-height: 100svh;
   overflow: hidden;
-  /* A faint paper grain, plus a little warmth towards the top */
+  /* From the top: the grain of the paper, the Tyne catching the sunset, the
+     blooms and drifts of the wash, then the sky itself, laid in wet-in-wet
+     from night down to the last light on the horizon. The large textures are
+     WebP renders of the SVGs in assets/texture/src (see the README). */
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.55), transparent 60%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    var(--paper);
+    url("../assets/texture/granulation.svg") 0 0 / 240px 240px,
+    url("../assets/texture/paper.svg") 0 0 / 320px 320px,
+    url("../assets/texture/river.webp") 0 100% / 100% 9% no-repeat,
+    url("../assets/texture/blooms.webp") center / cover no-repeat,
+    url("../assets/texture/drift.webp") center / cover no-repeat,
+    radial-gradient(ellipse 60% 45% at 85% 28%, rgb(84 54 150 / 0.35), transparent 70%),
+    linear-gradient(
+      var(--night),
+      var(--indigo) 20%,
+      var(--ultramarine) 44%,
+      #34409f 60%,
+      #74508f 72%,
+      #d27466 83%,
+      #f3a35f 90.6%,
+      #a65a5f 91%,
+      #5a3558 93.5%,
+      #24204d 97%,
+      var(--night)
+    );
+  background-blend-mode: multiply, soft-light, normal, soft-light, multiply, normal, normal;
+}
+/* Floodlight: a page-specific pool of warm light around its landmarks */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--floodlight);
+  pointer-events: none;
+}
+/* White gouache flicked across the top of the sky, for stars */
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    url("../assets/texture/spatter.svg") 0 0 / 1000px 640px,
+    url("../assets/texture/spatter.svg") 430px 260px / 640px 410px;
+  -webkit-mask-image: linear-gradient(#000 20vh, transparent 75vh);
+  mask-image: linear-gradient(#000 20vh, transparent 75vh);
+  pointer-events: none;
+  animation: twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes twinkle { to { opacity: 0.55; } }
+
+/* Grey's Monument, floodlit from below */
+.page--interest {
+  --floodlight: radial-gradient(ellipse 34vw 56vh at 100% 100%, rgb(var(--lamp) / 0.4), rgb(var(--lamp) / 0.12) 50%, transparent 74%);
+}
+/* A haze of light behind the university arches, where the sketch of the
+   building above them would otherwise be lost in the dusk. It is measured
+   from the painting (866 x 1100), so it follows it at every size. */
+.page--thanks {
+  --arches-h: clamp(220px, 44vh, 500px);
+  --floodlight: radial-gradient(
+    ellipse calc(var(--arches-h) * 0.62) calc(var(--arches-h) * 0.42)
+    at calc(var(--arches-h) * 0.36) calc(100% - var(--arches-h) * 0.74),
+    rgb(255 222 190 / 0.5), rgb(255 200 160 / 0.16) 55%, transparent 75%
+  );
 }
 
 .site-header {
@@ -199,7 +305,7 @@ h1, h2 {
   animation: develop 1.4s 0.3s ease-out both;
 }
 /* Both paintings run off the edge of their canvas on one more side than the
-   corner they sit in, so that edge is faded into the paper */
+   corner they sit in, so that edge is faded into the wash */
 .corner--right {
   right: 0;
   height: clamp(240px, 46vh, 520px);
@@ -208,7 +314,7 @@ h1, h2 {
 }
 .corner--left {
   left: 0;
-  height: clamp(220px, 44vh, 500px);
+  height: var(--arches-h);
   -webkit-mask-image: linear-gradient(to left, transparent, #000 18%);
   mask-image: linear-gradient(to left, transparent, #000 18%);
 }
@@ -217,9 +323,14 @@ h1, h2 {
   bottom: clamp(4px, 2vh, 20px);
   height: clamp(110px, 20vh, 220px);
 }
-/* Paintings fade up out of the paper, like watercolour soaking in */
+/* Paintings fade up out of the wash, like watercolour soaking in. The filter
+   lists match the paintings' own, so the glow eases in rather than snapping. */
 @keyframes develop {
-  from { opacity: 0; transform: translateY(14px); filter: saturate(0.2) blur(2px); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: saturate(0.2) blur(2px) drop-shadow(0 0 0 rgb(var(--lamp) / 0));
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -241,10 +352,11 @@ h1, h2 {
   margin: 0 auto;
   padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(16px, 3vh, 32px);
 }
-.interest__intro { grid-area: intro; align-self: end; }
+/* Above the panel, so the moon behind the magpie can never cover the words */
+.interest__intro { grid-area: intro; align-self: end; position: relative; z-index: 1; }
 .panel { grid-area: panel; align-self: center; }
 
-/* The Tyne Bridge, under the headline */
+/* The Tyne Bridge, under the headline, glowing in the lamplight */
 .interest__art {
   grid-area: art;
   align-self: start;
@@ -254,6 +366,7 @@ h1, h2 {
   object-fit: contain;
   object-position: left top;
   margin-left: -2%;
+  filter: saturate(1) blur(0) drop-shadow(0 0 48px rgb(var(--lamp) / 0.45));
   animation: develop 1.4s 0.3s ease-out both;
 }
 
@@ -261,23 +374,47 @@ h1, h2 {
 .title__small {
   display: block;
   font-size: clamp(1.8rem, 4vw, 3rem);
+  font-style: italic;
   font-weight: 400;
-  color: var(--sepia);
+  color: rgb(var(--lamp));
 }
 .title__big {
+  position: relative;
   display: block;
+  width: fit-content;
   font-size: clamp(5rem, 15vw, 11.5rem);
   font-weight: 700;
   line-height: 0.82;
   letter-spacing: -0.03em;
+  /* Painted, not printed: the paper's grain shows through the letters */
+  color: var(--cream);
+  background: url("../assets/texture/paper.svg") 0 0 / 320px 320px, var(--cream);
+  background-blend-mode: soft-light;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.title__stop { color: var(--metro-deep); }
+/* A single dry stroke of Metro yellow under the name */
+.title__big::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -0.04em;
+  right: -0.08em;
+  bottom: -0.1em;
+  height: 0.2em;
+  background: url("../assets/texture/brush.svg") center / 100% 100% no-repeat;
+  transform-origin: left center;
+  animation: brush 0.7s 0.6s cubic-bezier(.5, 0, .2, 1) both;
+}
+@keyframes brush { from { transform: scaleX(0); } }
+.title__stop { color: var(--metro); -webkit-text-fill-color: var(--metro); }
 
 .interest__lede {
   max-width: 32em;
   margin: 0;
   font-size: clamp(1.05rem, 1.5vw, 1.2rem);
-  color: var(--ink-soft);
+  color: var(--mist);
 }
 
 .interest__intro > *,
@@ -291,14 +428,56 @@ h1, h2 {
   from { opacity: 0; transform: translateY(18px); }
 }
 
+/* The form, on a sheet of watercolour paper. The sheet itself is drawn by
+   ::after so that its torn edge can be masked without clipping the magpie. */
 .panel {
+  --magpie-h: clamp(84px, 11vw, 118px);
+  --perch: clamp(20px, 3vw, 36px);
   position: relative;
+  isolation: isolate;
   padding: clamp(24px, 3vw, 34px);
-  border: 1px solid rgba(31, 27, 22, 0.08);
-  border-radius: 22px;
-  background: var(--card);
   color: var(--ink);
-  box-shadow: 0 2px 0 rgba(31, 27, 22, 0.04), 0 28px 60px -30px rgba(70, 45, 20, 0.45);
+  border-radius: 8px;
+  /* Tucked in, so the shadow shows below the torn edge rather than beside it */
+  box-shadow: 0 34px 60px -26px rgb(2 4 20 / 0.85), 0 12px 24px -16px rgb(2 4 20 / 0.5);
+}
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    url("../assets/texture/paper.svg") 0 0 / 320px 320px,
+    /* moonlight from above, and the last of the sunset from below */
+    radial-gradient(120% 70% at 85% 0%, #fffdf8, transparent 65%),
+    linear-gradient(to top, rgb(255 186 130 / 0.16), transparent 35%),
+    var(--card);
+  background-blend-mode: soft-light, normal, normal, normal;
+  /* The torn edge. It is inline rather than a file because browsers fetch mask
+     images under stricter rules than other images: a mask file that fails to
+     load (for example when the page is opened from disk) hides the whole sheet. */
+  --deckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 600' preserveAspectRatio='none'%3E%3Cfilter id='d' x='-5%25' y='-5%25' width='110%25' height='110%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.045' numOctaves='4' seed='3'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='8' xChannelSelector='R' yChannelSelector='G'/%3E%3CfeGaussianBlur stdDeviation='.5'/%3E%3C/filter%3E%3Crect x='5' y='5' width='490' height='590' rx='4' fill='%23fff' filter='url(%23d)'/%3E%3C/svg%3E");
+  -webkit-mask: var(--deckle) 0 0 / 100% 100% no-repeat;
+  mask: var(--deckle) 0 0 / 100% 100% no-repeat;
+}
+/* A moon rising behind the sheet, for the magpie to stand against */
+.panel::before {
+  /* The disc is just over half the width of the image (the rest is its halo):
+     about 1.3 magpies across, centred a third of a magpie above the edge */
+  --moon: calc(var(--magpie-h) * 2.44);
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: calc(var(--perch) + var(--magpie-h) * 0.42 - var(--moon) / 2);
+  bottom: calc(100% + var(--magpie-h) * 0.34 - var(--moon) / 2);
+  width: var(--moon);
+  height: var(--moon);
+  background: url("../assets/texture/moon.svg") center / contain no-repeat;
+  pointer-events: none;
+  animation: moonrise 1.8s 0.2s cubic-bezier(.2, .7, .2, 1) both;
+}
+@keyframes moonrise {
+  from { opacity: 0; transform: translateY(30%); }
 }
 .panel__title { font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; }
 .panel__lede { margin: 0.5em 0 1.3em; color: var(--ink-soft); }
@@ -306,9 +485,9 @@ h1, h2 {
 /* A magpie perched on the top edge of the form */
 .panel__magpie {
   position: absolute;
-  right: clamp(20px, 3vw, 36px);
+  right: var(--perch);
   bottom: calc(100% - 9px);
-  height: clamp(84px, 11vw, 118px);
+  height: var(--magpie-h);
   width: auto;
   pointer-events: none;
   animation: hop 0.7s 0.9s cubic-bezier(.3, .7, .4, 1.4) both;
@@ -328,7 +507,7 @@ h1, h2 {
   padding: 8px 18px 8px 8px;
   border-radius: 999px;
   background: var(--ink);
-  color: var(--paper);
+  color: var(--cream);
   font: 700 0.9rem/1 var(--font-display);
   letter-spacing: 0.04em;
 }
@@ -350,18 +529,20 @@ h1, h2 {
 .field input {
   width: 100%;
   padding: 12px 14px;
-  border: 2px solid rgba(31, 27, 22, 0.2);
+  border: 2px solid rgb(28 26 43 / 0.2);
   border-radius: 10px;
-  background: #fff;
+  background: #fffdf9;
   color: var(--ink);
+  caret-color: var(--pen);
   font: inherit;
   font-size: 1rem;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
+.field input::placeholder { color: #6e6a80; }
 .field input:focus {
   outline: none;
-  border-color: var(--ink);
-  box-shadow: 0 0 0 4px rgba(255, 199, 44, 0.55);
+  border-color: var(--pen);
+  box-shadow: 0 0 0 4px rgb(255 199 44 / 0.55);
 }
 .field.is-invalid input { border-color: var(--brick); }
 .field__error {
@@ -391,7 +572,7 @@ h1, h2 {
 .form__small { margin: -4px 0 0; font-size: 0.85rem; color: var(--ink-soft); text-align: center; }
 
 /* --------------------------------------------------------------------------
-   Thank you: the pencil Metrocar pulls in, then the note is sealed
+   Thank you: the Metro pulls in, drawn in light, then the note is sealed
    -------------------------------------------------------------------------- */
 .thanks {
   position: relative;
@@ -425,18 +606,33 @@ h1, h2 {
   position: relative;
   width: min(880px, 100%);
 }
+/* Light from the platform, spilling onto the track */
+.arrival__track::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -30%;
+  width: 150%;
+  height: 120%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgb(var(--lamp) / 0.28), transparent);
+  pointer-events: none;
+  animation: develop 1.2s 1.6s ease-out both;
+}
+/* The pencil drawing is inverted so it reads as white pencil on dark paper */
 .arrival__train {
   position: relative;
   z-index: 1;
   width: 100%;
   height: auto;
+  filter: invert(1) drop-shadow(0 0 0 rgb(255 246 228 / 0.7)) drop-shadow(0 0 7px rgb(255 214 140 / 0.45));
   animation: pull-in 2.6s 0.3s cubic-bezier(.12, .7, .25, 1.02) both;
 }
 @keyframes pull-in {
   from { transform: translateX(-130vw); }
   to { transform: translateX(0); }
 }
-/* Pencil rails, drawn in as the train approaches */
+/* White-pencil rails, drawn in as the train approaches */
 .arrival__rails {
   position: absolute;
   left: 50%;
@@ -446,32 +642,57 @@ h1, h2 {
   transform: translateX(-50%);
   max-width: none;
   overflow: visible;
+  /* Fading out towards the edges of the page, as a sketch would */
+  -webkit-mask-image: linear-gradient(90deg, transparent 33.3%, #000 42%, #000 58%, transparent 66.7%);
+  mask-image: linear-gradient(90deg, transparent 33.3%, #000 42%, #000 58%, transparent 66.7%);
 }
 .arrival__rails path {
   fill: none;
-  stroke: var(--ink);
+  stroke: var(--cream);
   stroke-linecap: round;
   stroke-dasharray: 6000;
   animation: draw 1.4s 0.1s ease-out both;
 }
 @keyframes draw { from { stroke-dashoffset: 6000; } }
 
-/* The message, on a note card */
+/* The message, on a page torn from a ruled notebook */
 .note {
   width: min(620px, 100%);
   text-align: left;
 }
 .note__card {
+  --margin: clamp(24px, 4vw, 44px);
   position: relative;
-  padding: clamp(24px, 4vw, 44px);
-  border: 1px solid rgba(31, 27, 22, 0.08);
-  border-radius: 6px;
-  background:
-    repeating-linear-gradient(transparent 0 31px, rgba(59, 111, 158, 0.12) 31px 32px) 0 18px / 100% 100% no-repeat,
-    var(--card);
-  box-shadow: 0 2px 0 rgba(31, 27, 22, 0.04), 0 28px 60px -30px rgba(70, 45, 20, 0.5);
+  isolation: isolate;
+  padding: var(--margin);
+  padding-top: calc(var(--margin) + 14px);
+  border-radius: 4px;
+  color: var(--ink);
+  box-shadow: 0 34px 60px -26px rgb(2 4 20 / 0.85), 0 12px 24px -16px rgb(2 4 20 / 0.5);
   transform: rotate(-1.2deg);
   animation: card-in 0.8s 2.9s cubic-bezier(.2, .8, .2, 1) both, thud 0.35s 3.95s ease-out;
+}
+/* The page: a red margin, feint blue rules, and holes punched along the top */
+.note__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent calc(var(--margin) - 14px), rgb(206 70 70 / 0.45) 0 calc(var(--margin) - 12.5px), transparent 0),
+    repeating-linear-gradient(transparent 0 31px, rgb(42 68 166 / 0.15) 31px 32px) 0 44px / 100% 100% no-repeat,
+    url("../assets/texture/paper.svg") 0 0 / 320px 320px,
+    var(--card);
+  background-blend-mode: normal, normal, soft-light, normal;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% 12px no-repeat,
+    radial-gradient(circle, transparent 5px, #000 5.6px) 0 12px / 30px 22px repeat-x,
+    linear-gradient(#000 0 0) 0 34px / 100% calc(100% - 34px) no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top / 100% 12px no-repeat,
+    radial-gradient(circle, transparent 5px, #000 5.6px) 0 12px / 30px 22px repeat-x,
+    linear-gradient(#000 0 0) 0 34px / 100% calc(100% - 34px) no-repeat;
 }
 @keyframes card-in {
   from { opacity: 0; transform: translateY(24px) rotate(1deg); }
@@ -488,11 +709,11 @@ h1, h2 {
   width: clamp(92px, 12vw, 132px);
   height: auto;
   transform: rotate(-12deg);
-  filter: drop-shadow(0 6px 6px rgba(60, 35, 15, 0.3));
+  filter: drop-shadow(0 6px 6px rgb(10 8 30 / 0.45));
   animation: stamp 0.6s 3.6s cubic-bezier(.5, 0, .75, 0) both;
 }
 @keyframes stamp {
-  0% { opacity: 0; transform: translateY(-40px) scale(2.2) rotate(-30deg); filter: drop-shadow(0 30px 18px rgba(60, 35, 15, 0.15)); }
+  0% { opacity: 0; transform: translateY(-40px) scale(2.2) rotate(-30deg); filter: drop-shadow(0 30px 18px rgb(10 8 30 / 0.2)); }
   30% { opacity: 1; }
   80% { transform: scale(0.94) rotate(-12deg); }
   100% { transform: scale(1) rotate(-12deg); }
@@ -500,7 +721,7 @@ h1, h2 {
 
 .thanks__kicker {
   margin: 0 0 0.3em;
-  color: var(--brick);
+  color: var(--pen);
   font: 700 clamp(1.2rem, 2.4vw, 1.6rem)/1.2 var(--font-display);
 }
 .thanks__title {
@@ -520,10 +741,14 @@ h1, h2 {
 @media (max-width: 880px) {
   /* Stacked: headline, form, then the Tyne Bridge to finish the page */
   .interest {
+    --stack-gap: clamp(28px, 5vh, 48px);
     grid-template-columns: 1fr;
     grid-template-areas: "intro" "panel" "art";
-    row-gap: clamp(28px, 5vh, 48px);
+    row-gap: var(--stack-gap);
   }
+  /* Clear space above the form for the moon and the magpie, which would
+     otherwise rise into the last lines of the intro on narrow phones */
+  .panel { margin-top: calc(var(--magpie-h) + 12px - var(--stack-gap)); }
   .interest__art {
     justify-self: center;
     width: min(100%, 560px);
@@ -531,9 +756,13 @@ h1, h2 {
     margin: 0;
   }
   .corner--right { display: none; }
+  /* With the Monument gone, the floodlight is on the bridge instead */
+  .page--interest {
+    --floodlight: radial-gradient(ellipse 90vw 46vh at 50% 100%, rgb(var(--lamp) / 0.32), transparent 72%);
+  }
   /* Room at the bottom of the thank-you page for the corner paintings */
   .thanks { padding-bottom: clamp(150px, 26vh, 240px); }
-  .corner--left { height: clamp(170px, 26vh, 260px); }
+  .page--thanks { --arches-h: clamp(170px, 26vh, 260px); }
   .corner--angel { height: clamp(80px, 13vh, 130px); }
 }
 
@@ -546,6 +775,12 @@ h1, h2 {
 @media (max-width: 520px) {
   .brand__name { font-size: 1.05rem; }
   .arrival__display { min-width: 0; font-size: 0.75rem; }
+}
+
+/* High-contrast modes drop backgrounds, which would leave the painted title
+   with no fill at all */
+@media (forced-colors: active) {
+  .title__big { -webkit-text-fill-color: currentColor; background: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

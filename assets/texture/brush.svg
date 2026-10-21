@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 60" preserveAspectRatio="none">
+  <!-- One dry-brush stroke of Metro yellow -->
+  <filter id="dry" x="-4%" y="-40%" width="108%" height="180%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.003 0.11" numOctaves="3" seed="8"/>
+    <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.4 0 0 0 -0.95" result="bristles"/>
+    <feComposite in="SourceGraphic" in2="bristles" operator="in" result="stroke"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3"/>
+    <feDisplacementMap in="stroke" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <path d="M10 33 C 140 22 330 17 592 21 C 594 27 591 34 586 39 C 380 39 190 44 16 52 C 9 46 7 39 10 33 Z" fill="#ffc72c" filter="url(#dry)"/>
+</svg>

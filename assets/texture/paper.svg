@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <!-- Cold-pressed watercolour paper, lit from the top left. Flat paper comes
+       out mid-grey, so it is neutral when blended with soft-light. -->
+  <filter id="p" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="4" seed="2" stitchTiles="stitch"/>
+    <feDiffuseLighting surfaceScale="1.7" diffuseConstant="1.1" lighting-color="#fff">
+      <feDistantLight azimuth="225" elevation="54"/>
+    </feDiffuseLighting>
+    <feColorMatrix values="0.6 0 0 0 -0.03  0 0.6 0 0 -0.03  0 0 0.6 0 -0.03  0 0 0 1 0"/>
+  </filter>
+  <rect width="320" height="320" filter="url(#p)"/>
+</svg>
