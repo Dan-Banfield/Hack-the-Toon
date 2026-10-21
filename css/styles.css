@@ -213,6 +213,8 @@ h1, h2 {
 .page {
   /* Each page floodlights its own landmarks (see the end of this section) */
   --floodlight: linear-gradient(transparent, transparent);
+  --edge-top: calc(90px + var(--safe-top));
+  --edge-bottom: calc(56px + var(--safe-bottom));
   position: relative;
   isolation: isolate;
   display: flex;
@@ -249,13 +251,20 @@ h1, h2 {
     );
   background-blend-mode: multiply, soft-light, normal, soft-light, multiply, normal, normal;
 }
-/* Floodlight: a page-specific pool of warm light around its landmarks */
+/* A page-specific pool of light around its landmarks, and the edges of the
+   sky softened into --zenith. In a browser tab, Safari on iOS paints its
+   status-bar and toolbar strips itself, in one flat colour taken from the
+   page's background; fading the top and bottom of the wash into exactly that
+   colour makes those strips read as more sky rather than as a band. */
 .page::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--floodlight);
+  background:
+    linear-gradient(var(--zenith), transparent) top / 100% var(--edge-top) no-repeat,
+    linear-gradient(transparent, var(--zenith)) bottom / 100% var(--edge-bottom) no-repeat,
+    var(--floodlight);
   pointer-events: none;
 }
 /* Clouds drifting slowly across the upper sky. The strip is one tile wider
@@ -270,6 +279,9 @@ h1, h2 {
   width: calc(100% + 1600px);
   height: min(70vh, 640px);
   background: url("../assets/texture/clouds.webp") 0 0 / 1600px 100% repeat-x;
+  /* Clear of the very top, where the sky fades into the status bar */
+  -webkit-mask-image: linear-gradient(transparent, #000 var(--edge-top));
+  mask-image: linear-gradient(transparent, #000 var(--edge-top));
   opacity: 0.85;
   pointer-events: none;
   animation: drift 240s linear infinite;
