@@ -8,6 +8,46 @@ const json = (body, status = 200) =>
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 
+// Sends the "We've received your interest" email via Resend, using the
+// template published in the Resend dashboard. A failure is logged but never fails the
+// sign-up, which is already safely in Supabase
+async function welcome(env, { name, email }) {
+  if (!env.RESEND_API_KEY || !env.RESEND_TEMPLATE_ID) return;
+
+  // The visitor typed these, so escape them before they go into the HTML email
+  const escape = (s) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const payload = {
+    to: email,
+    template: {
+      id: env.RESEND_TEMPLATE_ID,
+      variables: {
+        GREETING: `Whey aye, ${escape(name)}!`,
+        RECIPIENT_EMAIL: escape(email),
+      },
+    },
+  };
+  // Optional: override the template's default sender
+  if (env.RESEND_FROM) payload.from = env.RESEND_FROM;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const detail = await res.json().catch(() => ({}));
+      console.error("resend: send failed", res.status, detail.name ?? "", detail.message ?? "");
+    }
+  } catch (err) {
+    console.error("resend:", err.message);
+  }
+}
+
 export async function handleRegister(request, env, ctx) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY || !env.TURNSTILE_SECRET_KEY) {
     console.error("register: missing secrets");
@@ -68,10 +108,10 @@ export async function handleRegister(request, env, ctx) {
   });
 
   if (res.ok) {
-    // A new sign-up: send the confirmation email and add them to the Brevo
-    // list. waitUntil lets that finish after the visitor has their reply, so
-    // the form never waits on Brevo (and a Brevo outage can't break it).
-    // ctx.waitUntil(welcome(env, { name, email }));
+    // A new sign-up: send the confirmation email. waitUntil lets that finish
+    // after the visitor has their reply, so the form never waits on Resend
+    // (and a Resend outage can't break it).
+    ctx.waitUntil(welcome(env, { name, email }));
     return json({ ok: true });
   }
 
