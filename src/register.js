@@ -1,5 +1,3 @@
-import { welcome } from "./brevo.js";
-
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_NAME = 100;
 const MAX_EMAIL = 254;
@@ -46,9 +44,6 @@ export async function handleRegister(request, env, ctx) {
   const outcome = await check.json().catch(() => ({ success: false }));
   if (!outcome.success) return json({ error: "captcha" }, 403);
 
-  // Insert via Supabase's REST API. Secret keys (sb_secret_…) go in the
-  // apikey header; the legacy service_role key is a JWT and also goes in
-  // Authorization. "return=minimal" means we don't ask for the row back.
   const key = env.SUPABASE_SECRET_KEY;
   const headers = {
     apikey: key,
@@ -57,8 +52,6 @@ export async function handleRegister(request, env, ctx) {
   };
   if (key.startsWith("eyJ")) headers.Authorization = `Bearer ${key}`;
 
-  // Accept SUPABASE_URL with or without a path (Supabase's settings show it
-  // as ".../rest/v1/"): only the https://<project>.supabase.co part is used.
   let origin;
   try {
     origin = new URL(env.SUPABASE_URL.trim()).origin;
@@ -78,7 +71,7 @@ export async function handleRegister(request, env, ctx) {
     // A new sign-up: send the confirmation email and add them to the Brevo
     // list. waitUntil lets that finish after the visitor has their reply, so
     // the form never waits on Brevo (and a Brevo outage can't break it).
-    ctx.waitUntil(welcome(env, { name, email }));
+    // ctx.waitUntil(welcome(env, { name, email }));
     return json({ ok: true });
   }
 

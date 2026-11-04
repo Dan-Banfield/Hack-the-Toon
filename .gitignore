@@ -9,5 +9,5 @@ node_modules/
 .dev.vars
 .wrangler/
 
-# Local previews of the email templates (python3 email/preview.py)
+# Local previews of the email templates
 email/*.preview.html

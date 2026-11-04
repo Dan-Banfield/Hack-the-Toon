@@ -2,21 +2,7 @@
 <html lang="en-GB" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <!--
-    Hack the Toon: "We've received your interest" email, for Brevo.
-
-    Paste into Brevo → Transactional → Templates → New template → "Paste your code".
-    Subject suggestion: Whey aye! We've got your interest in Hack the Toon
-
-    Variables (Brevo template language), matching the Supabase `interest` table:
-      params.name        the name as entered on the form (the `name` column)
-      params.first_name  optional: just the first word of it, as the website's
-                         thank-you page uses ("Whey aye, Dan!")
-      params.email       the address it was sent to (the `email` column)
-    If neither name is passed, the greeting falls back to "Whey aye!".
-    If the recipient is a Brevo contact instead, contact.FIRSTNAME is used.
-
-    Images load from https://hackthetoon.com/assets/email/, so they only
-    appear once the site (with that folder) is deployed.
+    Hack the Toon: "We've received your interest" email.
   -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +36,7 @@
 
   <!-- Preview text shown next to the subject line in the inbox -->
   <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#2569b8; opacity:0;">
-    Thanks for registering your interest. We'll be in touch closer to the time. Until then, gan canny.
+    Thanks for registering your interest. We'll be in touch closer to the time. Until then, take care.
     &#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;
   </div>
 
