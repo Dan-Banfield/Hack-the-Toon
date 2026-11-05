@@ -20,4 +20,4 @@ assets/Images
 assets/texture/src
 
 # Their images in assets/email are served by the site, so they stay deployed.
-email
+/email
